@@ -54,10 +54,11 @@ function DashboardHome() {
   return (
     <div>
       <SectionTitle
-        eyebrow="Proposta comercial"
-        title="Dashboard Geral"
-        description="Visão consolidada das 5 soluções Leucotron negociadas com o Incarmed. Todos os valores são atualizáveis nos arquivos de dados do projeto."
+        eyebrow="Proposta comercial · Incarmed · Bahia"
+        title="Toda a proposta Leucotron em uma tela — sem planilhas, sem retrabalho"
+        description="5 soluções, valores atualizados e cenários de investimento prontos para a reunião com o TI do Incarmed. Sem esta visão consolidada, cada revisão custa dias de e-mail."
       />
+
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Investimento Mensal Recorrente" value={formatBRL(totalMensal)} hint="Soma das 5 soluções (Flux Cloud + Agente Tiny)" accent />
