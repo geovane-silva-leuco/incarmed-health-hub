@@ -1,0 +1,57 @@
+import { Link, useRouterState } from "@tanstack/react-router";
+import {
+  LayoutDashboard, Building2, MessageSquare, Bot, PhoneCall, Mic,
+  Wrench, Wallet, ListChecks, Link2, CalendarDays,
+} from "lucide-react";
+import { LeucotronWordmark } from "./brand";
+
+const items = [
+  { title: "Dashboard Geral", url: "/", icon: LayoutDashboard },
+  { title: "Sobre a Oportunidade", url: "/oportunidade", icon: Building2 },
+  { title: "Conecta", url: "/conecta", icon: MessageSquare },
+  { title: "Agente Inteligente", url: "/agente", icon: Bot },
+  { title: "Flux 3.0", url: "/flux", icon: PhoneCall },
+  { title: "VoiceBOT", url: "/voicebot", icon: Mic },
+  { title: "Sob Medida", url: "/sob-medida", icon: Wrench },
+  { title: "Financeiro Consolidado", url: "/financeiro", icon: Wallet },
+  { title: "Escopo & Não Escopo", url: "/escopo", icon: ListChecks },
+  { title: "Dependências", url: "/dependencias", icon: Link2 },
+  { title: "Cronograma", url: "/cronograma", icon: CalendarDays },
+];
+
+export function AppSidebar() {
+  const pathname = useRouterState({ select: (r) => r.location.pathname });
+  return (
+    <aside className="hidden w-64 flex-none flex-col bg-[var(--brand-navy)] text-white lg:flex print:hidden">
+      <div className="border-b border-white/10 px-5 py-5">
+        <LeucotronWordmark />
+        <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">
+          Proposta comercial
+        </p>
+        <p className="text-sm font-semibold text-white">Incarmed</p>
+      </div>
+      <nav className="flex-1 overflow-y-auto px-3 py-4">
+        {items.map((it) => {
+          const active = pathname === it.url;
+          return (
+            <Link
+              key={it.url}
+              to={it.url}
+              className={`mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                active
+                  ? "bg-[var(--brand-cyan)]/15 text-white shadow-[inset_3px_0_0_0_var(--brand-cyan)]"
+                  : "text-white/70 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <it.icon className={`h-4 w-4 ${active ? "text-[var(--brand-cyan)]" : ""}`} />
+              <span>{it.title}</span>
+            </Link>
+          );
+        })}
+      </nav>
+      <div className="border-t border-white/10 px-5 py-3 text-[11px] text-white/40">
+        Dashboard executivo · Uso comercial interno
+      </div>
+    </aside>
+  );
+}
