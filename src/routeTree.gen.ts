@@ -21,6 +21,7 @@ import { Route as ConectaRouteImport } from './routes/conecta'
 import { Route as AprovacaoRouteImport } from './routes/aprovacao'
 import { Route as AgenteRouteImport } from './routes/agente'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 
 const VoicebotRoute = VoicebotRouteImport.update({
   id: '/voicebot',
@@ -82,6 +83,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
+  id: '/admin/analytics',
+  path: '/admin/analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/oportunidade': typeof OportunidadeRoute
   '/sob-medida': typeof SobMedidaRoute
   '/voicebot': typeof VoicebotRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/oportunidade': typeof OportunidadeRoute
   '/sob-medida': typeof SobMedidaRoute
   '/voicebot': typeof VoicebotRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/oportunidade': typeof OportunidadeRoute
   '/sob-medida': typeof SobMedidaRoute
   '/voicebot': typeof VoicebotRoute
+  '/admin/analytics': typeof AdminAnalyticsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/oportunidade'
     | '/sob-medida'
     | '/voicebot'
+    | '/admin/analytics'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/oportunidade'
     | '/sob-medida'
     | '/voicebot'
+    | '/admin/analytics'
   id:
     | '__root__'
     | '/'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/oportunidade'
     | '/sob-medida'
     | '/voicebot'
+    | '/admin/analytics'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -184,6 +196,7 @@ export interface RootRouteChildren {
   OportunidadeRoute: typeof OportunidadeRoute
   SobMedidaRoute: typeof SobMedidaRoute
   VoicebotRoute: typeof VoicebotRoute
+  AdminAnalyticsRoute: typeof AdminAnalyticsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -272,6 +285,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/analytics': {
+      id: '/admin/analytics'
+      path: '/admin/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof AdminAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -288,6 +308,7 @@ const rootRouteChildren: RootRouteChildren = {
   OportunidadeRoute: OportunidadeRoute,
   SobMedidaRoute: SobMedidaRoute,
   VoicebotRoute: VoicebotRoute,
+  AdminAnalyticsRoute: AdminAnalyticsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
