@@ -71,15 +71,17 @@ function DashboardHome() {
           <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Composição do investimento mensal recorrente</h2>
           <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
           <div className="mt-4 h-[320px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={composicao} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={70} outerRadius={120} paddingAngle={2}>
-                  {composicao.map((_, i) => <Cell key={i} fill={PALETTE[i]} />)}
-                </Pie>
-                <Tooltip formatter={(v: number) => formatBRL(v)} />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+            {mounted && (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie data={composicao} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={70} outerRadius={120} paddingAngle={2}>
+                    {composicao.map((_, i) => <Cell key={i} fill={PALETTE[i]} />)}
+                  </Pie>
+                  <Tooltip formatter={(v: number) => formatBRL(v)} />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
           </div>
         </div>
 
