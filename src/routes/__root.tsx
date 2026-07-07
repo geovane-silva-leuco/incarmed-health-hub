@@ -79,17 +79,43 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "IncarMed — Dashboard Comercial Leucotron" },
-      { name: "description", content: "Dashboard executivo interativo da proposta Leucotron para o cliente Incarmed: Conecta, Agente Inteligente, Flux 3.0, VoiceBOT e projeto Sob Medida PIXEON." },
-      { name: "author", content: "Leucotron" },
-      { property: "og:title", content: "IncarMed — Dashboard Comercial Leucotron" },
-      { property: "og:description", content: "Proposta comercial consolidada para o cliente Incarmed." },
+      { title: "IncarMed × Leucotron — Proposta Comercial Interativa" },
+      { name: "description", content: "Dashboard executivo da proposta Leucotron para o Incarmed (BA): Conecta, Agente IA, Flux 3.0, VoiceBOT e integração PIXEON. Veja o investimento consolidado." },
+      { name: "author", content: "Leucotron Telecom" },
+      { name: "keywords", content: "telefonia hospitalar, omnichannel saúde, WhatsApp hospitalar, PABX em nuvem, IA para call center, integração PIXEON, Leucotron Bahia, central de relacionamento hospital" },
+      { name: "geo.region", content: "BR-BA" },
+      { name: "geo.placename", content: "Bahia, Brasil" },
+      { name: "ICBM", content: "-12.9714,-38.5014" },
+      { property: "og:site_name", content: "IncarMed × Leucotron" },
+      { property: "og:title", content: "IncarMed × Leucotron — Proposta Comercial Interativa" },
+      { property: "og:description", content: "Cinco soluções Leucotron consolidadas em um único dashboard executivo para o Incarmed." },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "pt_BR" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "IncarMed × Leucotron — Proposta Interativa" },
+      { name: "twitter:description", content: "Dashboard executivo da proposta comercial Leucotron para o Incarmed (BA)." },
+      { name: "robots", content: "noindex, nofollow" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Leucotron Telecom",
+          url: "https://www.leucotron.com.br",
+          areaServed: { "@type": "AdministrativeArea", name: "Bahia, Brasil" },
+          makesOffer: {
+            "@type": "Offer",
+            name: "Proposta Comercial Incarmed",
+            description: "Conecta, Agente Inteligente, Flux 3.0, VoiceBOT e integração PIXEON.",
+          },
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -97,6 +123,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
+
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
