@@ -22,7 +22,7 @@ const items = [
 export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   return (
-    <aside className="hidden w-64 flex-none flex-col bg-[var(--brand-navy)] text-white lg:flex print:hidden">
+    <aside className="sticky top-0 hidden h-screen w-64 flex-none flex-col self-start bg-[var(--brand-navy)] text-white lg:flex print:hidden">
       <div className="border-b border-white/10 px-5 py-5">
         <LeucotronWordmark />
         <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">
