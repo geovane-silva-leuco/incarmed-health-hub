@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SectionTitle, StatCard } from "@/components/leucotron/brand";
+import { SegmentedToggle } from "@/components/leucotron/segmented-toggle";
 import {
   conectaValorBaseMensal, conectaAtivacaoPremium,
   agenteInteligentePlanos, agenteInteligente,
@@ -9,6 +10,7 @@ import {
   type PlanoAgente,
 } from "@/data/pricing";
 import { formatBRL } from "@/lib/format";
+
 
 export const Route = createFileRoute("/financeiro")({
   head: () => ({
@@ -55,18 +57,26 @@ function FinanceiroPage() {
       <div className="mb-6 flex flex-wrap gap-6 rounded-xl border border-border bg-card p-5 shadow-sm print:hidden">
         <div>
           <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Flux 3.0</p>
-          <div className="inline-flex rounded-lg border border-border bg-white p-1">
-            <button onClick={() => setFluxModo("cloud")} className={`rounded px-3 py-1.5 text-sm font-semibold transition ${fluxModo === "cloud" ? "bg-[var(--brand-navy)] text-white" : "text-muted-foreground"}`}>Cloud · Mensal</button>
-            <button onClick={() => setFluxModo("onpremise")} className={`rounded px-3 py-1.5 text-sm font-semibold transition ${fluxModo === "onpremise" ? "bg-[var(--brand-navy)] text-white" : "text-muted-foreground"}`}>On-Premise · Anual</button>
-          </div>
+          <SegmentedToggle
+            ariaLabel="Modalidade do Flux 3.0"
+            size="sm"
+            value={fluxModo}
+            onChange={setFluxModo}
+            options={[
+              { value: "cloud", label: "Cloud · Mensal" },
+              { value: "onpremise", label: "On-Premise · Anual" },
+            ]}
+          />
         </div>
         <div>
           <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Agente Inteligente</p>
-          <div className="inline-flex rounded-lg border border-border bg-white p-1">
-            {agenteInteligentePlanos.map((p) => (
-              <button key={p.plano} onClick={() => setPlanoAgente(p.plano)} className={`rounded px-3 py-1.5 text-sm font-semibold transition ${planoAgente === p.plano ? "bg-[var(--brand-navy)] text-white" : "text-muted-foreground"}`}>{p.plano}</button>
-            ))}
-          </div>
+          <SegmentedToggle
+            ariaLabel="Plano do Agente Inteligente"
+            size="sm"
+            value={planoAgente}
+            onChange={setPlanoAgente}
+            options={agenteInteligentePlanos.map((p) => ({ value: p.plano, label: p.plano }))}
+          />
         </div>
         <div>
           <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">VoiceBOT</p>
@@ -76,14 +86,21 @@ function FinanceiroPage() {
               Incluir
             </label>
             {incluirVoiceBot && (
-              <div className="inline-flex rounded-lg border border-border bg-white p-1">
-                <button onClick={() => setModoVoice("mensal")} className={`rounded px-3 py-1.5 text-xs font-semibold transition ${modoVoice === "mensal" ? "bg-[var(--brand-navy)] text-white" : "text-muted-foreground"}`}>Mensal</button>
-                <button onClick={() => setModoVoice("anual")} className={`rounded px-3 py-1.5 text-xs font-semibold transition ${modoVoice === "anual" ? "bg-[var(--brand-navy)] text-white" : "text-muted-foreground"}`}>Anual à vista</button>
-              </div>
+              <SegmentedToggle
+                ariaLabel="Forma de pagamento do VoiceBOT"
+                size="sm"
+                value={modoVoice}
+                onChange={setModoVoice}
+                options={[
+                  { value: "mensal", label: "Mensal" },
+                  { value: "anual", label: "Anual à vista" },
+                ]}
+              />
             )}
           </div>
         </div>
       </div>
+
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <StatCard label="Total mensal recorrente" value={formatBRL(totalMensal)} accent />

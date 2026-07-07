@@ -1,10 +1,17 @@
 import { Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MobileNav } from "./mobile-nav";
 
+/**
+ * Cabeçalho superior — sticky. Em <lg exibe o botão hambúrguer (Sheet)
+ * para acessar o menu de navegação, já que o `AppSidebar` fixo só
+ * aparece a partir de 1024px.
+ */
 export function TopHeader() {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-white/95 px-6 backdrop-blur print:hidden">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-white/95 px-4 backdrop-blur lg:px-6 print:hidden">
       <div className="flex items-center gap-3">
+        <MobileNav />
         <span className="rounded-md bg-[var(--brand-navy)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--brand-cyan)]">
           Cliente
         </span>
@@ -23,8 +30,8 @@ export function TopHeader() {
           className="border-[var(--brand-navy)]/20 text-[var(--brand-navy)] hover:bg-[var(--brand-navy)] hover:text-white"
           onClick={() => window.print()}
         >
-          <Printer className="mr-2 h-4 w-4" />
-          Exportar PDF
+          <Printer className="mr-2 h-4 w-4" aria-hidden="true" />
+          <span>Exportar PDF</span>
         </Button>
       </div>
     </header>

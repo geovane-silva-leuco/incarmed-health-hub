@@ -2,11 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PhoneCall, Check, X } from "lucide-react";
 import { useState } from "react";
 import { ProductBanner, CheckList, StatCard } from "@/components/leucotron/brand";
+import { SegmentedToggle } from "@/components/leucotron/segmented-toggle";
 import {
   fluxModalidadeCloud, fluxModalidadeOnPremise,
   fluxPlanosOpcionais, fluxRecursosTelefonia, fluxRecursosIA,
 } from "@/data/pricing";
 import { formatBRL } from "@/lib/format";
+
 
 export const Route = createFileRoute("/flux")({
   head: () => ({
@@ -32,20 +34,18 @@ function FluxPage() {
         icon={<PhoneCall className="h-7 w-7" />}
       />
 
-      <div className="mb-6 inline-flex rounded-lg border border-border bg-white p-1 shadow-sm">
-        <button
-          onClick={() => setModo("cloud")}
-          className={`rounded-md px-4 py-2 text-sm font-semibold transition-colors ${isCloud ? "bg-[var(--brand-navy)] text-white" : "text-muted-foreground hover:text-[var(--brand-navy)]"}`}
-        >
-          Cloud · Mensal
-        </button>
-        <button
-          onClick={() => setModo("onpremise")}
-          className={`rounded-md px-4 py-2 text-sm font-semibold transition-colors ${!isCloud ? "bg-[var(--brand-navy)] text-white" : "text-muted-foreground hover:text-[var(--brand-navy)]"}`}
-        >
-          On-Premise · Anual
-        </button>
+      <div className="mb-6">
+        <SegmentedToggle
+          ariaLabel="Modalidade comercial do Flux 3.0"
+          value={modo}
+          onChange={setModo}
+          options={[
+            { value: "cloud", label: "Cloud · Mensal" },
+            { value: "onpremise", label: "On-Premise · Anual" },
+          ]}
+        />
       </div>
+
 
       <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
         <div className="flex flex-wrap items-baseline justify-between gap-4">

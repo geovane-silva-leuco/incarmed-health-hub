@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { useMemo } from "react";
 import { ArrowRight, MessageSquare, Bot, PhoneCall, Mic, Wrench } from "lucide-react";
 import { SectionTitle, StatCard } from "@/components/leucotron/brand";
 import { SocialProofStrip } from "@/components/leucotron/social-proof";
+import { CompositionChart } from "@/components/leucotron/composition-chart";
 import {
   conectaValorBaseMensal, conectaAtivacaoPremium,
   agenteInteligentePlanos, agenteInteligente,
@@ -12,6 +12,7 @@ import {
   sobMedida, sobMedidaFrentes,
 } from "@/data/pricing";
 import { formatBRL } from "@/lib/format";
+
 
 
 export const Route = createFileRoute("/")({
@@ -24,22 +25,17 @@ export const Route = createFileRoute("/")({
   component: DashboardHome,
 });
 
-const PALETTE = ["#00C2D1", "#0E2A5C", "#3B82F6", "#00E0FF", "#1E40AF"];
-
 /**
  * Home / Dashboard executivo.
  *
  * - Neuromarketing: H1 com aversão à perda; prova social (Padrão F) logo
  *   abaixo do título, antes dos preços aparecerem.
- * - Performance: gráfico Recharts renderizado só depois de `mounted` para
- *   evitar mismatch de SSR e reduzir custo do primeiro paint.
+ * - Performance: o gráfico Recharts está em chunk lazy (~90KB) via
+ *   `CompositionChart`, tirando-o do bundle inicial.
  * - Cálculo: `composicao`, `totalMensal` e `totalAtivacao` são memoizados
  *   pois derivam apenas de constantes dos data files.
  */
 function DashboardHome() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-
   const agenteTiny = agenteInteligentePlanos[0].valorMensal;
 
   const composicao = useMemo(
@@ -99,18 +95,8 @@ function DashboardHome() {
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm xl:col-span-2">
           <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Composição do investimento mensal recorrente</h2>
           <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
-          <div className="mt-4 h-[320px]">
-            {mounted && (
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie data={composicao} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={70} outerRadius={120} paddingAngle={2}>
-                    {composicao.map((_, i) => <Cell key={i} fill={PALETTE[i]} />)}
-                  </Pie>
-                  <Tooltip formatter={(v: number) => formatBRL(v)} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            )}
+          <div className="mt-4">
+            <CompositionChart data={composicao} />
           </div>
         </div>
 
