@@ -155,7 +155,10 @@ function RootComponent() {
             <Outlet />
           </main>
         </div>
+        {/* CTA persistente — Growth Hacking (Fogg B=MAP). Ocultado na home e ao imprimir. */}
+        <FloatingCTA />
       </div>
     </QueryClientProvider>
+
   );
 }
