@@ -147,11 +147,18 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen w-full bg-[var(--brand-surface)]">
+      {/* Skip link — A11y (WCAG 2.4.1). Fica visível ao receber foco via Tab. */}
+      <a
+        href="#conteudo-principal"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-[var(--brand-navy)] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-cyan)]"
+      >
+        Pular para o conteúdo principal
+      </a>
+      <div className="flex min-h-dvh w-full bg-[var(--brand-surface)]">
         <AppSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <TopHeader />
-          <main className="min-w-0 flex-1 px-6 py-8 lg:px-10 print:px-0 print:py-0">
+          <main id="conteudo-principal" className="min-w-0 flex-1 px-6 py-8 lg:px-10 print:px-0 print:py-0">
             <Outlet />
           </main>
         </div>
