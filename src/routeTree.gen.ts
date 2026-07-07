@@ -18,6 +18,7 @@ import { Route as EscopoRouteImport } from './routes/escopo'
 import { Route as DependenciasRouteImport } from './routes/dependencias'
 import { Route as CronogramaRouteImport } from './routes/cronograma'
 import { Route as ConectaRouteImport } from './routes/conecta'
+import { Route as AprovacaoRouteImport } from './routes/aprovacao'
 import { Route as AgenteRouteImport } from './routes/agente'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -66,6 +67,11 @@ const ConectaRoute = ConectaRouteImport.update({
   path: '/conecta',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AprovacaoRoute = AprovacaoRouteImport.update({
+  id: '/aprovacao',
+  path: '/aprovacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgenteRoute = AgenteRouteImport.update({
   id: '/agente',
   path: '/agente',
@@ -80,6 +86,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/agente': typeof AgenteRoute
+  '/aprovacao': typeof AprovacaoRoute
   '/conecta': typeof ConectaRoute
   '/cronograma': typeof CronogramaRoute
   '/dependencias': typeof DependenciasRoute
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/agente': typeof AgenteRoute
+  '/aprovacao': typeof AprovacaoRoute
   '/conecta': typeof ConectaRoute
   '/cronograma': typeof CronogramaRoute
   '/dependencias': typeof DependenciasRoute
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/agente': typeof AgenteRoute
+  '/aprovacao': typeof AprovacaoRoute
   '/conecta': typeof ConectaRoute
   '/cronograma': typeof CronogramaRoute
   '/dependencias': typeof DependenciasRoute
@@ -122,6 +131,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/agente'
+    | '/aprovacao'
     | '/conecta'
     | '/cronograma'
     | '/dependencias'
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/agente'
+    | '/aprovacao'
     | '/conecta'
     | '/cronograma'
     | '/dependencias'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/agente'
+    | '/aprovacao'
     | '/conecta'
     | '/cronograma'
     | '/dependencias'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgenteRoute: typeof AgenteRoute
+  AprovacaoRoute: typeof AprovacaoRoute
   ConectaRoute: typeof ConectaRoute
   CronogramaRoute: typeof CronogramaRoute
   DependenciasRoute: typeof DependenciasRoute
@@ -238,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConectaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aprovacao': {
+      id: '/aprovacao'
+      path: '/aprovacao'
+      fullPath: '/aprovacao'
+      preLoaderRoute: typeof AprovacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agente': {
       id: '/agente'
       path: '/agente'
@@ -258,6 +278,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgenteRoute: AgenteRoute,
+  AprovacaoRoute: AprovacaoRoute,
   ConectaRoute: ConectaRoute,
   CronogramaRoute: CronogramaRoute,
   DependenciasRoute: DependenciasRoute,

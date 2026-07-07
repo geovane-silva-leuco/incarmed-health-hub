@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mic } from "lucide-react";
+import { Mic, PhoneCall } from "lucide-react";
 import { ProductBanner, StatCard, CheckList } from "@/components/leucotron/brand";
 import { voicebot, voicebotModulos, voicebotCasosDeUso } from "@/data/pricing";
 import { formatBRL, formatNumber } from "@/lib/format";
@@ -23,6 +23,22 @@ function VoiceBotPage() {
         subtitle="Atendimento automatizado por voz com IA generativa. Opera junto ao PABX existente via SIP, com voz natural (ElevenLabs), RAG e integrações via API."
         icon={<Mic className="h-7 w-7" />}
       />
+
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[var(--brand-cyan)]/40 bg-[var(--brand-cyan)]/5 p-5">
+        <div>
+          <p className="text-sm font-semibold text-[var(--brand-navy)]">Demonstração ao vivo do VoiceBOT</p>
+          <p className="text-xs text-muted-foreground">Fale agora com um agente de voz real — sem instalar nada.</p>
+        </div>
+        <a
+          href="https://clicktocall.leucotron.com.br/clicktocall/vendas-leucotron/ligar?token=90aac52d33b38d9517193a63f2c73037"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-navy)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-cyan)]"
+        >
+          <PhoneCall className="h-5 w-5" aria-hidden="true" />
+          Ligue agora
+        </a>
+      </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Mensal recorrente" value={formatBRL(voicebot.valorMensal)} hint="Inclui plataforma + 1 agente + 1 número" accent />

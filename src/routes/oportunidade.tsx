@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SectionTitle, CheckList } from "@/components/leucotron/brand";
+import { SectionTitle } from "@/components/leucotron/brand";
 import { oportunidade } from "@/data/oportunidade";
 import { Users, Building, Target, Activity } from "lucide-react";
 
@@ -91,13 +91,6 @@ function OportunidadePage() {
         </div>
       </div>
 
-      <div className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
-        <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--brand-navy)]">Referências de mercado citadas na reunião</h3>
-        <div className="mt-1 h-[2px] w-8 bg-[var(--brand-cyan)]" />
-        <div className="mt-4">
-          <CheckList items={oportunidade.referencias} />
-        </div>
-      </div>
     </div>
   );
 }
