@@ -8,31 +8,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  LayoutDashboard, Building2, MessageSquare, Bot, PhoneCall, Mic,
-  Wrench, Wallet, ListChecks, Link2, CalendarDays,
-} from "lucide-react";
 import { LeucotronWordmark } from "./brand";
 import { useVisitedRoutes } from "@/hooks/use-visited-routes";
-
-/**
- * Menu lateral em Sheet para viewports < lg (o `AppSidebar` fixo esconde-se
- * abaixo de 1024px). Reaproveita a mesma ordem/itens e o mesmo indicador
- * Zeigarnik do sidebar de desktop, para consistência.
- */
-const items = [
-  { title: "Dashboard Geral", url: "/", icon: LayoutDashboard },
-  { title: "Sobre a Oportunidade", url: "/oportunidade", icon: Building2 },
-  { title: "Conecta", url: "/conecta", icon: MessageSquare },
-  { title: "Agente Inteligente", url: "/agente", icon: Bot },
-  { title: "Flux 3.0", url: "/flux", icon: PhoneCall },
-  { title: "VoiceBOT", url: "/voicebot", icon: Mic },
-  { title: "Sob Medida", url: "/sob-medida", icon: Wrench },
-  { title: "Financeiro Consolidado", url: "/financeiro", icon: Wallet },
-  { title: "Escopo & Não Escopo", url: "/escopo", icon: ListChecks },
-  { title: "Dependências", url: "/dependencias", icon: Link2 },
-  { title: "Cronograma", url: "/cronograma", icon: CalendarDays },
-] as const;
+import { navSections } from "./nav-items";
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
@@ -63,37 +41,44 @@ export function MobileNav() {
           </SheetTitle>
         </SheetHeader>
         <nav aria-label="Navegação principal (mobile)" className="px-3 py-4">
-          {items.map((it) => {
-            const active = pathname === it.url;
-            const seen = isVisited(it.url);
-            return (
-              <Link
-                key={it.url}
-                to={it.url}
-                aria-current={active ? "page" : undefined}
-                onClick={() => setOpen(false)}
-                className={`mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
-                  active
-                    ? "bg-[var(--brand-cyan)]/15 text-white shadow-[inset_3px_0_0_0_var(--brand-cyan)]"
-                    : "text-white/70 hover:bg-white/5 hover:text-white"
-                }`}
-              >
-                <it.icon
-                  className={`h-4 w-4 ${active ? "text-[var(--brand-cyan)]" : ""}`}
-                  aria-hidden="true"
-                />
-                <span className="flex-1 truncate">{it.title}</span>
-                <span
-                  aria-hidden="true"
-                  className={`text-[10px] leading-none ${
-                    seen ? "text-[var(--brand-cyan)]" : "text-white/25"
-                  }`}
-                >
-                  {seen ? "●" : "○"}
-                </span>
-              </Link>
-            );
-          })}
+          {navSections.map((section) => (
+            <div key={section.id} className="mb-4 last:mb-0">
+              <p className="mb-1.5 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--brand-cyan)]/80">
+                {section.label}
+              </p>
+              {section.items.map((it) => {
+                const active = pathname === it.url;
+                const seen = isVisited(it.url);
+                return (
+                  <Link
+                    key={it.url}
+                    to={it.url}
+                    aria-current={active ? "page" : undefined}
+                    onClick={() => setOpen(false)}
+                    className={`mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                      active
+                        ? "bg-[var(--brand-cyan)]/15 text-white shadow-[inset_3px_0_0_0_var(--brand-cyan)]"
+                        : "text-white/70 hover:bg-white/5 hover:text-white"
+                    }`}
+                  >
+                    <it.icon
+                      className={`h-4 w-4 ${active ? "text-[var(--brand-cyan)]" : ""}`}
+                      aria-hidden="true"
+                    />
+                    <span className="flex-1 truncate">{it.title}</span>
+                    <span
+                      aria-hidden="true"
+                      className={`text-[10px] leading-none ${
+                        seen ? "text-[var(--brand-cyan)]" : "text-white/25"
+                      }`}
+                    >
+                      {seen ? "●" : "○"}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
         </nav>
       </SheetContent>
     </Sheet>
