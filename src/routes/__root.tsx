@@ -14,6 +14,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppSidebar } from "@/components/leucotron/app-sidebar";
 import { TopHeader } from "@/components/leucotron/header";
 import { FloatingCTA } from "@/components/leucotron/floating-cta";
+import { useTracking } from "@/hooks/use-tracking";
+
 
 
 function NotFoundComponent() {
