@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Wrench, AlertTriangle } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { ProductBanner, StatCard } from "@/components/leucotron/brand";
 import { sobMedida, sobMedidaFrentes } from "@/data/pricing";
 import { formatBRL } from "@/lib/format";
