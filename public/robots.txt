@@ -1,0 +1,3 @@
+# Proposta comercial confidencial — não deve ser indexada.
+User-agent: *
+Disallow: /
