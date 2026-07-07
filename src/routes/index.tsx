@@ -26,23 +26,44 @@ export const Route = createFileRoute("/")({
 
 const PALETTE = ["#00C2D1", "#0E2A5C", "#3B82F6", "#00E0FF", "#1E40AF"];
 
+/**
+ * Home / Dashboard executivo.
+ *
+ * - Neuromarketing: H1 com aversão à perda; prova social (Padrão F) logo
+ *   abaixo do título, antes dos preços aparecerem.
+ * - Performance: gráfico Recharts renderizado só depois de `mounted` para
+ *   evitar mismatch de SSR e reduzir custo do primeiro paint.
+ * - Cálculo: `composicao`, `totalMensal` e `totalAtivacao` são memoizados
+ *   pois derivam apenas de constantes dos data files.
+ */
 function DashboardHome() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
   const agenteTiny = agenteInteligentePlanos[0].valorMensal;
-  const composicao = [
-    { name: "Conecta", value: conectaValorBaseMensal },
-    { name: "Agente Inteligente", value: agenteTiny },
-    { name: "Flux 3.0 (Cloud)", value: fluxModalidadeCloud.totalMensal },
-    { name: "VoiceBOT", value: voicebot.valorMensal },
-    { name: "Sob Medida", value: sobMedida.valorMensal },
-  ];
-  const totalMensal = composicao.reduce((s, c) => s + c.value, 0);
+
+  const composicao = useMemo(
+    () => [
+      { name: "Conecta", value: conectaValorBaseMensal },
+      { name: "Agente Inteligente", value: agenteTiny },
+      { name: "Flux 3.0 (Cloud)", value: fluxModalidadeCloud.totalMensal },
+      { name: "VoiceBOT", value: voicebot.valorMensal },
+      { name: "Sob Medida", value: sobMedida.valorMensal },
+    ],
+    [agenteTiny],
+  );
+
+  const totalMensal = useMemo(
+    () => composicao.reduce((s, c) => s + c.value, 0),
+    [composicao],
+  );
+
+  // Ativação = soma dos setups únicos + 1 mensalidade do VoiceBOT (padrão comercial).
   const totalAtivacao =
     conectaAtivacaoPremium +
     agenteInteligente.ativacaoMinima +
     fluxModalidadeCloud.ativacaoUnica +
-    Math.round(voicebot.valorMensal) + // 1 mensalidade
+    Math.round(voicebot.valorMensal) +
     sobMedida.ativacaoUnica;
 
   const cards = [
@@ -51,7 +72,7 @@ function DashboardHome() {
     { to: "/flux", icon: PhoneCall, nome: "Flux 3.0", desc: "PABX, telefonia, call center e colaboração Mobi.", valor: fluxModalidadeCloud.totalMensal, hint: "Modalidade Cloud" },
     { to: "/voicebot", icon: Mic, nome: "VoiceBOT", desc: "Atendimento por voz com IA — 1.500.000 créditos/mês.", valor: voicebot.valorMensal, hint: "3 agentes + 1 número" },
     { to: "/sob-medida", icon: Wrench, nome: "Sob Medida", desc: "Projeto de integração customizada com PIXEON — 5 frentes.", valor: sobMedida.valorMensal, hint: `${sobMedidaFrentes.length} frentes de trabalho` },
-  ];
+  ] as const;
 
   return (
     <div>
@@ -60,6 +81,11 @@ function DashboardHome() {
         title="Toda a proposta Leucotron em uma tela — sem planilhas, sem retrabalho"
         description="5 soluções, valores atualizados e cenários de investimento prontos para a reunião com o TI do Incarmed. Sem esta visão consolidada, cada revisão custa dias de e-mail."
       />
+
+      {/* Prova social — Padrão F, disparado antes de qualquer preço aparecer */}
+      <SocialProofStrip />
+
+
 
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
