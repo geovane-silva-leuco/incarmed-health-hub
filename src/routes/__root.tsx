@@ -146,6 +146,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useTracking(); // captura pageviews, tempo em página e cliques (window.__track)
+
+
 
   return (
     <QueryClientProvider client={queryClient}>
