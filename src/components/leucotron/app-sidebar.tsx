@@ -14,7 +14,7 @@ export function AppSidebar() {
   const totalVistas = allNavItems.filter((i) => visited.has(i.url)).length;
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-64 flex-none flex-col self-start bg-[var(--brand-navy)] text-white lg:flex print:hidden">
+    <aside className="sticky top-0 flex h-screen w-56 flex-none flex-col self-start bg-[var(--brand-navy)] text-white md:w-64 print:hidden">
       <div className="border-b border-white/10 px-5 py-5">
         <LeucotronWordmark />
         <p className="mt-3 text-[11px] font-medium uppercase tracking-[0.18em] text-white/50">
