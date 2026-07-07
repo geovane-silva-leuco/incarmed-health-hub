@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SectionTitle, CheckList } from "@/components/leucotron/brand";
+import { SectionTitle } from "@/components/leucotron/brand";
 import { oportunidade } from "@/data/oportunidade";
 import { Users, Building, Target, Activity } from "lucide-react";
 
