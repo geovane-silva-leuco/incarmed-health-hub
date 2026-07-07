@@ -46,4 +46,4 @@ export const navSections = [
   },
 ] as const;
 
-export const allNavItems = navSections.flatMap((s) => s.items);
+export const allNavItems = navSections.flatMap((s) => s.items as ReadonlyArray<{ title: string; url: string; icon: typeof LayoutDashboard }>);
