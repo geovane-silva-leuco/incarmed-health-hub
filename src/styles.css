@@ -95,6 +95,18 @@
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
   --sidebar-border: oklch(0.929 0.013 255.508);
   --sidebar-ring: oklch(0.704 0.04 256.788);
+
+  /* Leucotron brand tokens */
+  --brand-navy: #0A1F44;
+  --brand-navy-2: #0E2A5C;
+  --brand-cyan: #00C2D1;
+  --brand-cyan-hi: #00E0FF;
+  --brand-surface: #F5F7FA;
+}
+
+@media print {
+  body { background: white !important; }
+  .print\:hidden { display: none !important; }
 }
 
 .dark {
