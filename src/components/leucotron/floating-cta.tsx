@@ -23,6 +23,7 @@ export function FloatingCTA() {
       <Link
         to="/oportunidade"
         aria-label="Ir para a página da oportunidade e agendar kick-off com o TI"
+        onClick={() => (window as unknown as { __track?: (l: string, t?: string) => void }).__track?.("floating_cta_kickoff", "cta")}
         className="pointer-events-auto group inline-flex items-center gap-2 rounded-full bg-[var(--brand-cyan)] px-5 py-3 text-sm font-bold text-[var(--brand-navy)] shadow-lg shadow-[var(--brand-navy)]/25 ring-1 ring-[var(--brand-navy)]/10 transition-all hover:-translate-y-0.5 hover:bg-[var(--brand-cyan-hi)] hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-navy)] focus-visible:ring-offset-2"
       >
         <CalendarCheck2 className="h-4 w-4" aria-hidden="true" />
