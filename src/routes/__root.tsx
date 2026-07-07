@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AppSidebar } from "@/components/leucotron/app-sidebar";
+import { TopHeader } from "@/components/leucotron/header";
 
 function NotFoundComponent() {
   return (
@@ -77,20 +79,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "IncarMed — Dashboard Comercial Leucotron" },
+      { name: "description", content: "Dashboard executivo interativo da proposta Leucotron para o cliente Incarmed: Conecta, Agente Inteligente, Flux 3.0, VoiceBOT e projeto Sob Medida PIXEON." },
+      { name: "author", content: "Leucotron" },
+      { property: "og:title", content: "IncarMed — Dashboard Comercial Leucotron" },
+      { property: "og:description", content: "Proposta comercial consolidada para o cliente Incarmed." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
@@ -102,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
@@ -119,8 +117,15 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="flex min-h-screen w-full bg-[var(--brand-surface)]">
+        <AppSidebar />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <TopHeader />
+          <main className="min-w-0 flex-1 px-6 py-8 lg:px-10 print:px-0 print:py-0">
+            <Outlet />
+          </main>
+        </div>
+      </div>
     </QueryClientProvider>
   );
 }
