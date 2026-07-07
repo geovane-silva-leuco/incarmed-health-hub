@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { ArrowRight, MessageSquare, Bot, PhoneCall, Mic, Wrench } from "lucide-react";
 import { SectionTitle, StatCard } from "@/components/leucotron/brand";
+import { SocialProofStrip } from "@/components/leucotron/social-proof";
 import {
   conectaValorBaseMensal, conectaAtivacaoPremium,
   agenteInteligentePlanos, agenteInteligente,
@@ -11,6 +12,7 @@ import {
   sobMedida, sobMedidaFrentes,
 } from "@/data/pricing";
 import { formatBRL } from "@/lib/format";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
