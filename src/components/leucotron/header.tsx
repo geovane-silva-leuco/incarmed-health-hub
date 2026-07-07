@@ -1,17 +1,15 @@
 import { Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { MobileNav } from "./mobile-nav";
 
 /**
- * Cabeçalho superior — sticky. Em <lg exibe o botão hambúrguer (Sheet)
- * para acessar o menu de navegação, já que o `AppSidebar` fixo só
- * aparece a partir de 1024px.
+ * Cabeçalho superior — sticky. A sidebar principal agora fica visível
+ * em todos os tamanhos de tela, então não há mais botão hambúrguer.
  */
 export function TopHeader() {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-white/95 px-4 backdrop-blur lg:px-6 print:hidden">
       <div className="flex items-center gap-3">
-        <MobileNav />
+
         <span className="rounded-md bg-[var(--brand-navy)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--brand-cyan)]">
           Cliente
         </span>

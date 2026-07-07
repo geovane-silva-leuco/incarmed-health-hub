@@ -14,6 +14,8 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppSidebar } from "@/components/leucotron/app-sidebar";
 import { TopHeader } from "@/components/leucotron/header";
 import { FloatingCTA } from "@/components/leucotron/floating-cta";
+import { useTracking } from "@/hooks/use-tracking";
+
 
 
 function NotFoundComponent() {
@@ -144,6 +146,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useTracking(); // captura pageviews, tempo em página e cliques (window.__track)
+
+
 
   return (
     <QueryClientProvider client={queryClient}>
