@@ -9,8 +9,68 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VoicebotRouteImport } from './routes/voicebot'
+import { Route as SobMedidaRouteImport } from './routes/sob-medida'
+import { Route as OportunidadeRouteImport } from './routes/oportunidade'
+import { Route as FluxRouteImport } from './routes/flux'
+import { Route as FinanceiroRouteImport } from './routes/financeiro'
+import { Route as EscopoRouteImport } from './routes/escopo'
+import { Route as DependenciasRouteImport } from './routes/dependencias'
+import { Route as CronogramaRouteImport } from './routes/cronograma'
+import { Route as ConectaRouteImport } from './routes/conecta'
+import { Route as AgenteRouteImport } from './routes/agente'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VoicebotRoute = VoicebotRouteImport.update({
+  id: '/voicebot',
+  path: '/voicebot',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SobMedidaRoute = SobMedidaRouteImport.update({
+  id: '/sob-medida',
+  path: '/sob-medida',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OportunidadeRoute = OportunidadeRouteImport.update({
+  id: '/oportunidade',
+  path: '/oportunidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FluxRoute = FluxRouteImport.update({
+  id: '/flux',
+  path: '/flux',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinanceiroRoute = FinanceiroRouteImport.update({
+  id: '/financeiro',
+  path: '/financeiro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscopoRoute = EscopoRouteImport.update({
+  id: '/escopo',
+  path: '/escopo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DependenciasRoute = DependenciasRouteImport.update({
+  id: '/dependencias',
+  path: '/dependencias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CronogramaRoute = CronogramaRouteImport.update({
+  id: '/cronograma',
+  path: '/cronograma',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConectaRoute = ConectaRouteImport.update({
+  id: '/conecta',
+  path: '/conecta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgenteRoute = AgenteRouteImport.update({
+  id: '/agente',
+  path: '/agente',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +79,172 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agente': typeof AgenteRoute
+  '/conecta': typeof ConectaRoute
+  '/cronograma': typeof CronogramaRoute
+  '/dependencias': typeof DependenciasRoute
+  '/escopo': typeof EscopoRoute
+  '/financeiro': typeof FinanceiroRoute
+  '/flux': typeof FluxRoute
+  '/oportunidade': typeof OportunidadeRoute
+  '/sob-medida': typeof SobMedidaRoute
+  '/voicebot': typeof VoicebotRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agente': typeof AgenteRoute
+  '/conecta': typeof ConectaRoute
+  '/cronograma': typeof CronogramaRoute
+  '/dependencias': typeof DependenciasRoute
+  '/escopo': typeof EscopoRoute
+  '/financeiro': typeof FinanceiroRoute
+  '/flux': typeof FluxRoute
+  '/oportunidade': typeof OportunidadeRoute
+  '/sob-medida': typeof SobMedidaRoute
+  '/voicebot': typeof VoicebotRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agente': typeof AgenteRoute
+  '/conecta': typeof ConectaRoute
+  '/cronograma': typeof CronogramaRoute
+  '/dependencias': typeof DependenciasRoute
+  '/escopo': typeof EscopoRoute
+  '/financeiro': typeof FinanceiroRoute
+  '/flux': typeof FluxRoute
+  '/oportunidade': typeof OportunidadeRoute
+  '/sob-medida': typeof SobMedidaRoute
+  '/voicebot': typeof VoicebotRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/agente'
+    | '/conecta'
+    | '/cronograma'
+    | '/dependencias'
+    | '/escopo'
+    | '/financeiro'
+    | '/flux'
+    | '/oportunidade'
+    | '/sob-medida'
+    | '/voicebot'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/agente'
+    | '/conecta'
+    | '/cronograma'
+    | '/dependencias'
+    | '/escopo'
+    | '/financeiro'
+    | '/flux'
+    | '/oportunidade'
+    | '/sob-medida'
+    | '/voicebot'
+  id:
+    | '__root__'
+    | '/'
+    | '/agente'
+    | '/conecta'
+    | '/cronograma'
+    | '/dependencias'
+    | '/escopo'
+    | '/financeiro'
+    | '/flux'
+    | '/oportunidade'
+    | '/sob-medida'
+    | '/voicebot'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgenteRoute: typeof AgenteRoute
+  ConectaRoute: typeof ConectaRoute
+  CronogramaRoute: typeof CronogramaRoute
+  DependenciasRoute: typeof DependenciasRoute
+  EscopoRoute: typeof EscopoRoute
+  FinanceiroRoute: typeof FinanceiroRoute
+  FluxRoute: typeof FluxRoute
+  OportunidadeRoute: typeof OportunidadeRoute
+  SobMedidaRoute: typeof SobMedidaRoute
+  VoicebotRoute: typeof VoicebotRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/voicebot': {
+      id: '/voicebot'
+      path: '/voicebot'
+      fullPath: '/voicebot'
+      preLoaderRoute: typeof VoicebotRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sob-medida': {
+      id: '/sob-medida'
+      path: '/sob-medida'
+      fullPath: '/sob-medida'
+      preLoaderRoute: typeof SobMedidaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/oportunidade': {
+      id: '/oportunidade'
+      path: '/oportunidade'
+      fullPath: '/oportunidade'
+      preLoaderRoute: typeof OportunidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/flux': {
+      id: '/flux'
+      path: '/flux'
+      fullPath: '/flux'
+      preLoaderRoute: typeof FluxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/financeiro': {
+      id: '/financeiro'
+      path: '/financeiro'
+      fullPath: '/financeiro'
+      preLoaderRoute: typeof FinanceiroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/escopo': {
+      id: '/escopo'
+      path: '/escopo'
+      fullPath: '/escopo'
+      preLoaderRoute: typeof EscopoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dependencias': {
+      id: '/dependencias'
+      path: '/dependencias'
+      fullPath: '/dependencias'
+      preLoaderRoute: typeof DependenciasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cronograma': {
+      id: '/cronograma'
+      path: '/cronograma'
+      fullPath: '/cronograma'
+      preLoaderRoute: typeof CronogramaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conecta': {
+      id: '/conecta'
+      path: '/conecta'
+      fullPath: '/conecta'
+      preLoaderRoute: typeof ConectaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agente': {
+      id: '/agente'
+      path: '/agente'
+      fullPath: '/agente'
+      preLoaderRoute: typeof AgenteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +257,16 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgenteRoute: AgenteRoute,
+  ConectaRoute: ConectaRoute,
+  CronogramaRoute: CronogramaRoute,
+  DependenciasRoute: DependenciasRoute,
+  EscopoRoute: EscopoRoute,
+  FinanceiroRoute: FinanceiroRoute,
+  FluxRoute: FluxRoute,
+  OportunidadeRoute: OportunidadeRoute,
+  SobMedidaRoute: SobMedidaRoute,
+  VoicebotRoute: VoicebotRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
