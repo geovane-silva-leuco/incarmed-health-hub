@@ -25,6 +25,8 @@ export const Route = createFileRoute("/")({
 const PALETTE = ["#00C2D1", "#0E2A5C", "#3B82F6", "#00E0FF", "#1E40AF"];
 
 function DashboardHome() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const agenteTiny = agenteInteligentePlanos[0].valorMensal;
   const composicao = [
     { name: "Conecta", value: conectaValorBaseMensal },
