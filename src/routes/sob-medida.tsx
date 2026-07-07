@@ -24,14 +24,8 @@ function SobMedidaPage() {
         icon={<Wrench className="h-7 w-7" />}
       />
 
-      <div className="mb-6 rounded-lg border-l-4 border-l-[var(--brand-cyan)] bg-[var(--brand-cyan)]/5 p-4">
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="mt-0.5 h-4 w-4 flex-none text-[var(--brand-cyan)]" />
-          <p className="text-sm text-foreground">
-            <strong>Importante:</strong> este projeto <strong>não é</strong> o Agente Inteligente. O valor mensal (R$ 1.447,00) coincide com o plano Tiny do Agente por acaso — são contratações e recursos totalmente separados.
-          </p>
-        </div>
-      </div>
+
+
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         <StatCard label="Mensal recorrente" value={formatBRL(sobMedida.valorMensal)} hint="Manutenção e evolução do projeto" accent />
