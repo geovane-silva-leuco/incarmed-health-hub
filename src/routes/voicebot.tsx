@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mic } from "lucide-react";
+import { Mic, PhoneCall } from "lucide-react";
 import { ProductBanner, StatCard, CheckList } from "@/components/leucotron/brand";
 import { voicebot, voicebotModulos, voicebotCasosDeUso } from "@/data/pricing";
 import { formatBRL, formatNumber } from "@/lib/format";
