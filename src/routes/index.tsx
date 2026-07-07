@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
 import { ArrowRight, MessageSquare, Bot, PhoneCall, Mic, Wrench } from "lucide-react";
 import { SectionTitle, StatCard } from "@/components/leucotron/brand";
