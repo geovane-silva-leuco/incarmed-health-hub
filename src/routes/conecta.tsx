@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, CalendarCheck2, Check } from "lucide-react";
 import { ProductBanner, CheckList } from "@/components/leucotron/brand";
 import {
   conectaPacotesMensagens, conectaTaxaMidia, conectaBIC,
@@ -7,6 +7,7 @@ import {
   conectaRecursosIlimitados, conectaDestaques,
 } from "@/data/pricing";
 import { formatBRL, formatBRLLong, formatNumber } from "@/lib/format";
+import { useProposalConfig } from "@/lib/proposal-config";
 
 export const Route = createFileRoute("/conecta")({
   head: () => ({
