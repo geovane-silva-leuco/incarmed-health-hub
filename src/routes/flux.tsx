@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PhoneCall, Check, X } from "lucide-react";
-import { useState } from "react";
 import { ProductBanner, CheckList, StatCard } from "@/components/leucotron/brand";
 import { SegmentedToggle } from "@/components/leucotron/segmented-toggle";
 import {
@@ -8,6 +7,7 @@ import {
   fluxPlanosOpcionais, fluxRecursosTelefonia, fluxRecursosIA,
 } from "@/data/pricing";
 import { formatBRL } from "@/lib/format";
+import { useProposalConfig, setProposalConfig, type FluxModalidade } from "@/lib/proposal-config";
 
 
 export const Route = createFileRoute("/flux")({
@@ -21,7 +21,9 @@ export const Route = createFileRoute("/flux")({
 });
 
 function FluxPage() {
-  const [modo, setModo] = useState<"cloud" | "onpremise">("cloud");
+  const cfg = useProposalConfig();
+  const modo = cfg.fluxModalidade;
+  const setModo = (v: FluxModalidade) => setProposalConfig({ fluxModalidade: v });
   const m = modo === "cloud" ? fluxModalidadeCloud : fluxModalidadeOnPremise;
   const isCloud = modo === "cloud";
 
@@ -29,29 +31,30 @@ function FluxPage() {
     <div>
       <ProductBanner
         eyebrow="Solução 3 de 5"
-        title="Flux 3.0"
+        title="Flux 3.0 · PABX"
         subtitle="PABX, telefonia IP, call center e colaboração (Mobi). Duas modalidades comerciais reais e simultâneas — o cliente escolhe."
         icon={<PhoneCall className="h-7 w-7" />}
       />
 
       <div className="mb-6">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Modalidade contratada</p>
         <SegmentedToggle
           ariaLabel="Modalidade comercial do Flux 3.0"
           value={modo}
           onChange={setModo}
           options={[
-            { value: "cloud", label: "Cloud · Mensal" },
-            { value: "onpremise", label: "On-Premise · Anual" },
+            { value: "cloud", label: "Cloud · SaaS Mensal" },
+            { value: "onpremise", label: "On-Premise · Licenciamento Anual" },
           ]}
         />
       </div>
 
 
-      <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+      <div className="rounded-xl border-2 border-[var(--brand-cyan)] bg-card p-6 shadow-sm">
         <div className="flex flex-wrap items-baseline justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-wider text-[var(--brand-cyan)] font-semibold">Modalidade selecionada</p>
-            <h2 className="mt-1 text-xl font-semibold text-[var(--brand-navy)]">{m.nome}</h2>
+            <p className="inline-flex items-center gap-1 rounded-full bg-[var(--brand-cyan)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"><Check className="h-3 w-3" /> Contratado</p>
+            <h2 className="mt-2 text-xl font-semibold text-[var(--brand-navy)]">{m.nome}</h2>
             <p className="text-sm text-muted-foreground">Hospedagem: {m.quemHospeda} · Pagamento: {m.pagamento}</p>
           </div>
         </div>

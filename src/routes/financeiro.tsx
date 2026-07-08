@@ -1,15 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { SectionTitle, StatCard } from "@/components/leucotron/brand";
 import { SegmentedToggle } from "@/components/leucotron/segmented-toggle";
 import {
-  conectaValorBaseMensal, conectaAtivacaoPremium,
+  conectaPacotesMensagens, conectaAtivacaoPremium,
   agenteInteligentePlanos, agenteInteligente,
   fluxModalidadeCloud, fluxModalidadeOnPremise,
-  voicebot, sobMedida,
+  voicebot, sobMedida, sobMedidaFrentes,
   type PlanoAgente,
 } from "@/data/pricing";
-import { formatBRL } from "@/lib/format";
+import { formatBRL, formatNumber } from "@/lib/format";
+import {
+  useProposalConfig, setProposalConfig,
+  getConectaPacote, getAgentePlano,
+  type FluxModalidade, type VoiceBotModo,
+} from "@/lib/proposal-config";
 
 
 export const Route = createFileRoute("/financeiro")({
@@ -22,24 +26,61 @@ export const Route = createFileRoute("/financeiro")({
   component: FinanceiroPage,
 });
 
+/**
+ * Página financeira — controla a `ProposalConfig` global. Toda alteração
+ * aqui reflete no Dashboard, cards de soluções, tela de Aprovação, etc.
+ */
 function FinanceiroPage() {
-  const [fluxModo, setFluxModo] = useState<"cloud" | "onpremise">("cloud");
-  const [planoAgente, setPlanoAgente] = useState<PlanoAgente>("Tiny");
-  const [incluirVoiceBot, setIncluirVoiceBot] = useState(true);
-  const [modoVoice, setModoVoice] = useState<"mensal" | "anual">("mensal");
+  const cfg = useProposalConfig();
 
-  const agente = agenteInteligentePlanos.find((p) => p.plano === planoAgente)!;
-  const flux = fluxModo === "cloud" ? fluxModalidadeCloud : fluxModalidadeOnPremise;
-  const fluxMensal = fluxModo === "cloud" ? fluxModalidadeCloud.totalMensal : fluxModalidadeOnPremise.equivalenteMensal;
-  const voiceMensal = incluirVoiceBot ? (modoVoice === "mensal" ? voicebot.valorMensal : voicebot.equivalenteMensalNoAnual) : 0;
-  const voiceAtivacao = incluirVoiceBot ? Math.round(voicebot.valorMensal) : 0; // 1 mensalidade
+  const conectaPacote = getConectaPacote(cfg);
+  const agente = getAgentePlano(cfg);
+  const flux = cfg.fluxModalidade === "cloud" ? fluxModalidadeCloud : fluxModalidadeOnPremise;
+  const fluxMensal = cfg.fluxModalidade === "cloud" ? fluxModalidadeCloud.totalMensal : fluxModalidadeOnPremise.equivalenteMensal;
+  const incluirVoice = cfg.voicebotModo !== "off";
+  const voiceMensal = !incluirVoice
+    ? 0
+    : cfg.voicebotModo === "mensal"
+    ? voicebot.valorMensal
+    : voicebot.equivalenteMensalNoAnual;
+  const voiceAtivacao = incluirVoice ? Math.round(voicebot.valorMensal) : 0;
 
   const linhas = [
-    { solucao: "Conecta", tipo: "SaaS", mensal: conectaValorBaseMensal, ativacao: conectaAtivacaoPremium, pagamento: "Mensal (pacote 25.000 msg)" },
-    { solucao: `Agente Inteligente · ${planoAgente}`, tipo: "SaaS", mensal: agente.valorMensal, ativacao: agenteInteligente.ativacaoMinima, pagamento: "Mensal" },
-    { solucao: `Flux 3.0 · ${fluxModo === "cloud" ? "Cloud" : "On-Premise"}`, tipo: fluxModo === "cloud" ? "SaaS" : "Licenciamento anual", mensal: fluxMensal, ativacao: flux.ativacaoUnica, pagamento: flux.pagamento },
-    { solucao: "VoiceBOT", tipo: "SaaS", mensal: voiceMensal, ativacao: voiceAtivacao, pagamento: incluirVoiceBot ? (modoVoice === "mensal" ? "Mensal" : "Anual à vista") : "—" },
-    { solucao: "Sob Medida — Integração PIXEON", tipo: "Projeto", mensal: sobMedida.valorMensal, ativacao: sobMedida.ativacaoUnica, pagamento: "Mensal + ativação" },
+    {
+      solucao: `Conecta · Pacote ${formatNumber(conectaPacote.mensagens)} msg${cfg.conectaConfirmadorConsultas ? " + Confirmador de Consultas" : ""}`,
+      tipo: "SaaS",
+      mensal: conectaPacote.valorMensal,
+      ativacao: conectaAtivacaoPremium,
+      pagamento: `Mensal (pacote ${formatNumber(conectaPacote.mensagens)} msg)`,
+    },
+    {
+      solucao: `Agente Inteligente · ${agente.plano}`,
+      tipo: "SaaS",
+      mensal: agente.valorMensal,
+      ativacao: agenteInteligente.ativacaoMinima,
+      pagamento: "Mensal",
+    },
+    {
+      solucao: `Flux 3.0 · ${cfg.fluxModalidade === "cloud" ? "Cloud (SaaS)" : "On-Premise (Licenciamento anual)"}`,
+      tipo: cfg.fluxModalidade === "cloud" ? "SaaS" : "Licenciamento anual",
+      mensal: fluxMensal,
+      ativacao: flux.ativacaoUnica,
+      pagamento: flux.pagamento,
+    },
+    {
+      solucao: "VoiceBOT",
+      tipo: "SaaS",
+      mensal: voiceMensal,
+      ativacao: voiceAtivacao,
+      pagamento: incluirVoice ? (cfg.voicebotModo === "mensal" ? "Mensal" : "Anual à vista") : "—",
+    },
+    {
+      solucao: `Sob Medida · ${cfg.sobMedidaFrentes.length}/${sobMedidaFrentes.length} frentes`,
+      tipo: "Projeto",
+      mensal: sobMedida.valorMensal,
+      ativacao: sobMedida.ativacaoUnica,
+      pagamento: "Mensal + ativação",
+    },
   ];
 
   const totalMensal = linhas.reduce((s, l) => s + l.mensal, 0);
@@ -51,52 +92,74 @@ function FinanceiroPage() {
       <SectionTitle
         eyebrow="Consolidação"
         title="Financeiro Consolidado"
-        description="Ajuste as variáveis para simular diferentes combinações. Os totais recalculam automaticamente."
+        description="Ajuste a configuração da proposta. As mudanças refletem em todo o dashboard, cards de soluções e tela de aprovação."
       />
 
-      <div className="mb-6 flex flex-wrap gap-6 rounded-xl border border-border bg-card p-5 shadow-sm print:hidden">
-        <div>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Flux 3.0</p>
-          <SegmentedToggle
-            ariaLabel="Modalidade do Flux 3.0"
-            size="sm"
-            value={fluxModo}
-            onChange={setFluxModo}
-            options={[
-              { value: "cloud", label: "Cloud · Mensal" },
-              { value: "onpremise", label: "On-Premise · Anual" },
-            ]}
-          />
-        </div>
-        <div>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Agente Inteligente</p>
-          <SegmentedToggle
-            ariaLabel="Plano do Agente Inteligente"
-            size="sm"
-            value={planoAgente}
-            onChange={setPlanoAgente}
-            options={agenteInteligentePlanos.map((p) => ({ value: p.plano, label: p.plano }))}
-          />
-        </div>
-        <div>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">VoiceBOT</p>
-          <div className="flex items-center gap-2">
-            <label className="inline-flex cursor-pointer items-center gap-2 text-sm">
-              <input type="checkbox" checked={incluirVoiceBot} onChange={(e) => setIncluirVoiceBot(e.target.checked)} className="h-4 w-4 accent-[var(--brand-cyan)]" />
-              Incluir
-            </label>
-            {incluirVoiceBot && (
-              <SegmentedToggle
-                ariaLabel="Forma de pagamento do VoiceBOT"
-                size="sm"
-                value={modoVoice}
-                onChange={setModoVoice}
-                options={[
-                  { value: "mensal", label: "Mensal" },
-                  { value: "anual", label: "Anual à vista" },
-                ]}
+      <div className="mb-6 space-y-5 rounded-xl border border-border bg-card p-5 shadow-sm print:hidden">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Conecta · Pacote de mensagens</p>
+            <select
+              value={cfg.conectaPacoteMensagens}
+              onChange={(e) => setProposalConfig({ conectaPacoteMensagens: Number(e.target.value) })}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              aria-label="Pacote Conecta"
+            >
+              {conectaPacotesMensagens.map((p) => (
+                <option key={p.mensagens} value={p.mensagens}>
+                  {formatNumber(p.mensagens)} msg — {formatBRL(p.valorMensal)}/mês
+                </option>
+              ))}
+            </select>
+            <label className="mt-2 inline-flex cursor-pointer items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={cfg.conectaConfirmadorConsultas}
+                onChange={(e) => setProposalConfig({ conectaConfirmadorConsultas: e.target.checked })}
+                className="h-4 w-4 accent-[var(--brand-cyan)]"
               />
-            )}
+              Incluir <strong>Confirmador de Consultas</strong> (módulo Conecta)
+            </label>
+          </div>
+
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Agente Inteligente</p>
+            <SegmentedToggle
+              ariaLabel="Plano do Agente Inteligente"
+              size="sm"
+              value={cfg.agentePlano}
+              onChange={(v: PlanoAgente) => setProposalConfig({ agentePlano: v })}
+              options={agenteInteligentePlanos.map((p) => ({ value: p.plano, label: p.plano }))}
+            />
+          </div>
+
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Flux 3.0 · PABX</p>
+            <SegmentedToggle
+              ariaLabel="Modalidade do Flux 3.0"
+              size="sm"
+              value={cfg.fluxModalidade}
+              onChange={(v: FluxModalidade) => setProposalConfig({ fluxModalidade: v })}
+              options={[
+                { value: "cloud", label: "Cloud · Mensal" },
+                { value: "onpremise", label: "On-Premise · Anual" },
+              ]}
+            />
+          </div>
+
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">VoiceBOT</p>
+            <SegmentedToggle
+              ariaLabel="Contratação do VoiceBOT"
+              size="sm"
+              value={cfg.voicebotModo}
+              onChange={(v: VoiceBotModo) => setProposalConfig({ voicebotModo: v })}
+              options={[
+                { value: "mensal", label: "Mensal" },
+                { value: "anual", label: "Anual" },
+                { value: "off", label: "Sem VoiceBOT" },
+              ]}
+            />
           </div>
         </div>
       </div>

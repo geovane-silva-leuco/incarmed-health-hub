@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, CalendarCheck2, Check } from "lucide-react";
 import { ProductBanner, CheckList } from "@/components/leucotron/brand";
 import {
   conectaPacotesMensagens, conectaTaxaMidia, conectaBIC,
@@ -7,6 +7,7 @@ import {
   conectaRecursosIlimitados, conectaDestaques,
 } from "@/data/pricing";
 import { formatBRL, formatBRLLong, formatNumber } from "@/lib/format";
+import { useProposalConfig } from "@/lib/proposal-config";
 
 export const Route = createFileRoute("/conecta")({
   head: () => ({
@@ -19,6 +20,9 @@ export const Route = createFileRoute("/conecta")({
 });
 
 function ConectaPage() {
+  const cfg = useProposalConfig();
+  const pacoteContratado = cfg.conectaPacoteMensagens;
+
   return (
     <div>
       <ProductBanner
@@ -27,6 +31,21 @@ function ConectaPage() {
         subtitle="Plataforma de atendimento omnichannel: WhatsApp, redes sociais, webchat, e-mail, voz — tudo em uma única tela, com automação, dashboard em tempo real e integrações via API."
         icon={<MessageSquare className="h-7 w-7" />}
       />
+
+      {/* Resumo do que está contratado nesta proposta — cruzamento com a config global. */}
+      <div className="mb-6 rounded-xl border-2 border-[var(--brand-cyan)] bg-[var(--brand-cyan)]/5 p-5">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--brand-navy)]">Contratado nesta proposta</p>
+        <div className="mt-2 flex flex-wrap items-center gap-3">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--brand-navy)] px-3 py-1 text-xs font-semibold text-white">
+            <Check className="h-3 w-3" /> Pacote {formatNumber(pacoteContratado)} msg/mês
+          </span>
+          {cfg.conectaConfirmadorConsultas && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--brand-navy)] px-3 py-1 text-xs font-semibold text-white">
+              <CalendarCheck2 className="h-3 w-3" /> Confirmador de Consultas
+            </span>
+          )}
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
@@ -41,12 +60,44 @@ function ConectaPage() {
         </div>
       </div>
 
+      {/* Módulo Confirmador de Consultas — add-on do Conecta. */}
+      <div className="mt-6 rounded-xl border border-border bg-card p-6 shadow-sm">
+        <div className="flex items-start gap-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-navy)] text-[var(--brand-cyan)]">
+            <CalendarCheck2 className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Confirmador de Consultas</h2>
+              {cfg.conectaConfirmadorConsultas ? (
+                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">Contratado</span>
+              ) : (
+                <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-700">Opcional — não contratado</span>
+              )}
+            </div>
+            <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
+            <p className="mt-3 text-sm text-muted-foreground">
+              Módulo do Conecta que envia HSM automatizado de confirmação de consulta via WhatsApp, coleta a resposta do paciente
+              (confirma, remarca ou cancela) e devolve o status ao PIXEON — reduzindo no-show sem operação manual.
+            </p>
+            <CheckList
+              items={[
+                "Disparo automatizado de HSM aprovado pela Meta (24h/48h antes da consulta)",
+                "Fluxo de resposta: Confirmar · Remarcar · Cancelar",
+                "Integração com a agenda do PIXEON via API",
+                "Relatório de taxa de confirmação / no-show por período",
+              ]}
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="mt-6 rounded-xl border border-border bg-card shadow-sm">
         <div className="p-6 pb-3">
           <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Pacotes de mensagens (WhatsApp)</h2>
           <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
           <p className="mt-2 text-sm text-muted-foreground">
-            Volume atual do Incarmed (~15-16k msg/mês) → pacote sugerido: <strong className="text-[var(--brand-navy)]">25.000 mensagens</strong>. Excedente cobrado no mês seguinte.
+            Volume atual do Incarmed (~15-16k msg/mês). Pacote contratado destacado abaixo. Excedente cobrado no mês seguinte.
           </p>
         </div>
         <div className="overflow-x-auto">
@@ -59,13 +110,26 @@ function ConectaPage() {
               </tr>
             </thead>
             <tbody>
-              {conectaPacotesMensagens.map((p, i) => (
-                <tr key={p.mensagens} className={i % 2 ? "bg-[var(--brand-surface)]" : "bg-white"}>
-                  <td className="px-4 py-2.5">{formatNumber(p.mensagens)}</td>
-                  <td className="px-4 py-2.5 text-right font-semibold">{formatBRL(p.valorMensal)}</td>
-                  <td className="px-4 py-2.5 text-right font-mono text-xs">{formatBRLLong(p.valorExcedente)}</td>
-                </tr>
-              ))}
+              {conectaPacotesMensagens.map((p, i) => {
+                const contratado = p.mensagens === pacoteContratado;
+                return (
+                  <tr
+                    key={p.mensagens}
+                    className={
+                      contratado
+                        ? "bg-[var(--brand-cyan)]/15 font-semibold text-[var(--brand-navy)]"
+                        : i % 2 ? "bg-[var(--brand-surface)]" : "bg-white"
+                    }
+                  >
+                    <td className="px-4 py-2.5">
+                      {contratado && <Check className="mr-1 inline h-3.5 w-3.5 text-[var(--brand-navy)]" />}
+                      {formatNumber(p.mensagens)}
+                    </td>
+                    <td className="px-4 py-2.5 text-right font-semibold">{formatBRL(p.valorMensal)}</td>
+                    <td className="px-4 py-2.5 text-right font-mono text-xs">{formatBRLLong(p.valorExcedente)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

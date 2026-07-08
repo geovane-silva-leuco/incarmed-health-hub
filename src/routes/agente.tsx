@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Bot, AlertTriangle } from "lucide-react";
+import { Bot, AlertTriangle, Check } from "lucide-react";
 import { ProductBanner } from "@/components/leucotron/brand";
 import { agenteInteligentePlanos, agenteInteligente } from "@/data/pricing";
 import { formatBRL, formatBRLLong } from "@/lib/format";
+import { useProposalConfig } from "@/lib/proposal-config";
 
 export const Route = createFileRoute("/agente")({
   head: () => ({
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/agente")({
 });
 
 function AgentePage() {
+  const cfg = useProposalConfig();
   return (
     <div>
       <ProductBanner
@@ -53,20 +55,23 @@ function AgentePage() {
 
       <h2 className="mb-4 text-lg font-semibold text-[var(--brand-navy)]">Planos disponíveis</h2>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-        {agenteInteligentePlanos.map((p, i) => (
-          <div key={p.plano} className={`rounded-xl border p-6 shadow-sm ${i === 0 ? "border-[var(--brand-cyan)] bg-white ring-1 ring-[var(--brand-cyan)]/30" : "border-border bg-card"}`}>
-            {i === 0 && (
-              <span className="mb-3 inline-block rounded-full bg-[var(--brand-cyan)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
-                Base sugerida
-              </span>
-            )}
-            <h3 className="text-2xl font-bold text-[var(--brand-navy)]">{p.plano}</h3>
-            <p className="mt-1 text-3xl font-bold text-[var(--brand-navy)]">
-              {formatBRL(p.valorMensal)}<span className="ml-1 text-sm font-normal text-muted-foreground">/mês</span>
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{p.limites}</p>
-          </div>
-        ))}
+        {agenteInteligentePlanos.map((p) => {
+          const contratado = p.plano === cfg.agentePlano;
+          return (
+            <div key={p.plano} className={`rounded-xl border p-6 shadow-sm ${contratado ? "border-[var(--brand-cyan)] bg-white ring-2 ring-[var(--brand-cyan)]/40" : "border-border bg-card"}`}>
+              {contratado && (
+                <span className="mb-3 inline-flex items-center gap-1 rounded-full bg-[var(--brand-cyan)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+                  <Check className="h-3 w-3" /> Contratado
+                </span>
+              )}
+              <h3 className="text-2xl font-bold text-[var(--brand-navy)]">{p.plano}</h3>
+              <p className="mt-1 text-3xl font-bold text-[var(--brand-navy)]">
+                {formatBRL(p.valorMensal)}<span className="ml-1 text-sm font-normal text-muted-foreground">/mês</span>
+              </p>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{p.limites}</p>
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">

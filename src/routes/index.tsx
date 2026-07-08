@@ -1,17 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { ArrowRight, MessageSquare, Bot, PhoneCall, Mic, Wrench } from "lucide-react";
+import { ArrowRight, MessageSquare, Bot, PhoneCall, Mic, Wrench, CalendarCheck2 } from "lucide-react";
 import { SectionTitle, StatCard } from "@/components/leucotron/brand";
 import { SocialProofStrip } from "@/components/leucotron/social-proof";
 import { CompositionChart } from "@/components/leucotron/composition-chart";
 import {
-  conectaValorBaseMensal, conectaAtivacaoPremium,
-  agenteInteligentePlanos, agenteInteligente,
-  fluxModalidadeCloud,
+  conectaAtivacaoPremium,
+  agenteInteligente,
+  fluxModalidadeCloud, fluxModalidadeOnPremise,
   voicebot,
   sobMedida, sobMedidaFrentes,
 } from "@/data/pricing";
-import { formatBRL } from "@/lib/format";
+import { formatBRL, formatNumber } from "@/lib/format";
+import {
+  useProposalConfig,
+  getConectaPacote,
+  getAgentePlano,
+} from "@/lib/proposal-config";
 
 
 
@@ -28,46 +33,101 @@ export const Route = createFileRoute("/")({
 /**
  * Home / Dashboard executivo.
  *
- * - Neuromarketing: H1 com aversão à perda; prova social (Padrão F) logo
- *   abaixo do título, antes dos preços aparecerem.
- * - Performance: o gráfico Recharts está em chunk lazy (~90KB) via
- *   `CompositionChart`, tirando-o do bundle inicial.
- * - Cálculo: `composicao`, `totalMensal` e `totalAtivacao` são memoizados
- *   pois derivam apenas de constantes dos data files.
+ * Faz o cruzamento de dados entre a configuração comercial escolhida
+ * (`useProposalConfig`) e os valores oficiais de `@/data/pricing`. Cada card
+ * de solução mostra exatamente o pacote/plano/modalidade contratado.
  */
 function DashboardHome() {
-  const agenteTiny = agenteInteligentePlanos[0].valorMensal;
+  const cfg = useProposalConfig();
+
+  const conectaPacote = getConectaPacote(cfg);
+  const agente = getAgentePlano(cfg);
+  const flux = cfg.fluxModalidade === "cloud" ? fluxModalidadeCloud : fluxModalidadeOnPremise;
+  const fluxMensal = cfg.fluxModalidade === "cloud" ? fluxModalidadeCloud.totalMensal : fluxModalidadeOnPremise.equivalenteMensal;
+  const voiceMensal =
+    cfg.voicebotModo === "off"
+      ? 0
+      : cfg.voicebotModo === "mensal"
+      ? voicebot.valorMensal
+      : voicebot.equivalenteMensalNoAnual;
 
   const composicao = useMemo(
-    () => [
-      { name: "Conecta", value: conectaValorBaseMensal },
-      { name: "Agente Inteligente", value: agenteTiny },
-      { name: "Flux 3.0 (Cloud)", value: fluxModalidadeCloud.totalMensal },
-      { name: "VoiceBOT", value: voicebot.valorMensal },
-      { name: "Sob Medida", value: sobMedida.valorMensal },
-    ],
-    [agenteTiny],
+    () =>
+      [
+        { name: "Conecta", value: conectaPacote.valorMensal },
+        { name: `Agente · ${agente.plano}`, value: agente.valorMensal },
+        { name: `Flux 3.0 (${cfg.fluxModalidade === "cloud" ? "Cloud" : "On-Prem"})`, value: fluxMensal },
+        { name: "VoiceBOT", value: voiceMensal },
+        { name: "Sob Medida", value: sobMedida.valorMensal },
+      ].filter((c) => c.value > 0),
+    [conectaPacote.valorMensal, agente.plano, agente.valorMensal, cfg.fluxModalidade, fluxMensal, voiceMensal],
   );
 
-  const totalMensal = useMemo(
-    () => composicao.reduce((s, c) => s + c.value, 0),
-    [composicao],
-  );
+  const totalMensal = composicao.reduce((s, c) => s + c.value, 0);
 
   // Ativação = soma dos setups únicos + 1 mensalidade do VoiceBOT (padrão comercial).
   const totalAtivacao =
     conectaAtivacaoPremium +
     agenteInteligente.ativacaoMinima +
-    fluxModalidadeCloud.ativacaoUnica +
-    Math.round(voicebot.valorMensal) +
+    flux.ativacaoUnica +
+    (cfg.voicebotModo === "off" ? 0 : Math.round(voicebot.valorMensal)) +
     sobMedida.ativacaoUnica;
 
+  const voiceHint =
+    cfg.voicebotModo === "off"
+      ? "Não incluso nesta configuração"
+      : cfg.voicebotModo === "mensal"
+      ? "3 agentes + 1 número · Mensal"
+      : "3 agentes + 1 número · Anual à vista";
+
   const cards = [
-    { to: "/conecta", icon: MessageSquare, nome: "Conecta", desc: "Plataforma omnichannel (WhatsApp, redes, chat, voz).", valor: conectaValorBaseMensal, hint: "Pacote 25.000 msg" },
-    { to: "/agente", icon: Bot, nome: "Agente Inteligente", desc: "IA conversacional por texto — planos Tiny, Small e Medium.", valor: agenteTiny, hint: "Plano Tiny" },
-    { to: "/flux", icon: PhoneCall, nome: "Flux 3.0", desc: "PABX, telefonia, call center e colaboração Mobi.", valor: fluxModalidadeCloud.totalMensal, hint: "Modalidade Cloud" },
-    { to: "/voicebot", icon: Mic, nome: "VoiceBOT", desc: "Atendimento por voz com IA — 1.500.000 créditos/mês.", valor: voicebot.valorMensal, hint: "3 agentes + 1 número" },
-    { to: "/sob-medida", icon: Wrench, nome: "Sob Medida", desc: "Projeto de integração customizada com PIXEON — 5 frentes.", valor: sobMedida.valorMensal, hint: `${sobMedidaFrentes.length} frentes de trabalho` },
+    {
+      to: "/conecta",
+      icon: MessageSquare,
+      nome: "Conecta",
+      desc: "Plataforma omnichannel (WhatsApp, redes, chat, voz).",
+      valor: conectaPacote.valorMensal,
+      hint: `Pacote ${formatNumber(conectaPacote.mensagens)} msg/mês${cfg.conectaConfirmadorConsultas ? " · + Confirmador de Consultas" : ""}`,
+      badge: cfg.conectaConfirmadorConsultas ? { icon: CalendarCheck2, label: "Confirmador de consultas" } : null,
+    },
+    {
+      to: "/agente",
+      icon: Bot,
+      nome: "Agente Inteligente",
+      desc: "IA conversacional por texto — plano contratado abaixo.",
+      valor: agente.valorMensal,
+      hint: `Plano ${agente.plano}`,
+      badge: null,
+    },
+    {
+      to: "/flux",
+      icon: PhoneCall,
+      nome: "Flux 3.0 · PABX",
+      desc: cfg.fluxModalidade === "cloud"
+        ? "Licença + hospedagem gerenciada pela Leucotron."
+        : "Licenciamento anual — hospedagem na Incarmed.",
+      valor: fluxMensal,
+      hint: cfg.fluxModalidade === "cloud" ? "Modalidade Cloud (SaaS mensal)" : "Modalidade On-Premise (Licenciamento anual)",
+      badge: null,
+    },
+    {
+      to: "/voicebot",
+      icon: Mic,
+      nome: "VoiceBOT",
+      desc: "Atendimento por voz com IA — 1.500.000 créditos/mês.",
+      valor: voiceMensal,
+      hint: voiceHint,
+      badge: null,
+    },
+    {
+      to: "/sob-medida",
+      icon: Wrench,
+      nome: "Sob Medida",
+      desc: "Projeto de integração customizada com PIXEON.",
+      valor: sobMedida.valorMensal,
+      hint: `${cfg.sobMedidaFrentes.length} de ${sobMedidaFrentes.length} frentes contratadas`,
+      badge: null,
+    },
   ] as const;
 
   return (
@@ -81,20 +141,20 @@ function DashboardHome() {
       {/* Prova social — Padrão F, disparado antes de qualquer preço aparecer */}
       <SocialProofStrip />
 
-
-
-
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Investimento Mensal Recorrente" value={formatBRL(totalMensal)} hint="Soma das 5 soluções (Flux Cloud + Agente Tiny)" accent />
+        <StatCard label="Investimento Mensal Recorrente" value={formatBRL(totalMensal)} hint={`Config. atual: Conecta ${formatNumber(conectaPacote.mensagens)} · Agente ${agente.plano} · Flux ${cfg.fluxModalidade === "cloud" ? "Cloud" : "On-Prem"}`} accent />
         <StatCard label="Investimento Único (Ativações)" value={formatBRL(totalAtivacao)} hint="Setup + configuração inicial" />
-        <StatCard label="Soluções na proposta" value="5" hint="Conecta · Agente · Flux · VoiceBOT · Sob Medida" />
-        <StatCard label="Frentes do Sob Medida" value={String(sobMedidaFrentes.length)} hint="Integração PIXEON completa" />
+        <StatCard label="Soluções ativas" value={String(composicao.length)} hint={cfg.voicebotModo === "off" ? "VoiceBOT fora da configuração" : "Conecta · Agente · Flux · VoiceBOT · Sob Medida"} />
+        <StatCard label="Frentes do Sob Medida" value={`${cfg.sobMedidaFrentes.length} / ${sobMedidaFrentes.length}`} hint="Integração PIXEON" />
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm xl:col-span-2">
           <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Composição do investimento mensal recorrente</h2>
           <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
+          <p className="mt-2 text-xs text-muted-foreground">
+            Reflete a configuração atual da proposta. Ajuste em <Link to="/financeiro" className="font-semibold text-[var(--brand-cyan)] hover:underline">Financeiro Consolidado</Link>.
+          </p>
           <div className="mt-4">
             <CompositionChart data={composicao} />
           </div>
@@ -132,9 +192,17 @@ function DashboardHome() {
             </div>
             <h3 className="mt-4 text-lg font-semibold text-[var(--brand-navy)]">{c.nome}</h3>
             <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
+            {c.badge && (
+              <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[var(--brand-cyan)]/10 px-2.5 py-1 text-[11px] font-semibold text-[var(--brand-navy)]">
+                <c.badge.icon className="h-3 w-3" /> {c.badge.label}
+              </div>
+            )}
             <div className="mt-4 border-t border-border pt-3">
-              <p className="text-xs uppercase tracking-wider text-muted-foreground">A partir de</p>
-              <p className="text-xl font-bold text-[var(--brand-navy)]">{formatBRL(c.valor)}<span className="ml-1 text-xs font-normal text-muted-foreground">/mês</span></p>
+              <p className="text-xs uppercase tracking-wider text-muted-foreground">Contratado</p>
+              <p className="text-xl font-bold text-[var(--brand-navy)]">
+                {c.valor === 0 ? "—" : formatBRL(c.valor)}
+                {c.valor > 0 && <span className="ml-1 text-xs font-normal text-muted-foreground">/mês</span>}
+              </p>
               <p className="text-[11px] text-muted-foreground">{c.hint}</p>
             </div>
           </Link>
