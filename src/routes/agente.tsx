@@ -64,15 +64,14 @@ function AgentePage() {
                   <Check className="h-3 w-3" /> Contratado
                 </span>
               )}
-              </span>
-            )}
-            <h3 className="text-2xl font-bold text-[var(--brand-navy)]">{p.plano}</h3>
-            <p className="mt-1 text-3xl font-bold text-[var(--brand-navy)]">
-              {formatBRL(p.valorMensal)}<span className="ml-1 text-sm font-normal text-muted-foreground">/mês</span>
-            </p>
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{p.limites}</p>
-          </div>
-        ))}
+              <h3 className="text-2xl font-bold text-[var(--brand-navy)]">{p.plano}</h3>
+              <p className="mt-1 text-3xl font-bold text-[var(--brand-navy)]">
+                {formatBRL(p.valorMensal)}<span className="ml-1 text-sm font-normal text-muted-foreground">/mês</span>
+              </p>
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{p.limites}</p>
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
