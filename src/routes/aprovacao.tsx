@@ -48,12 +48,45 @@ const contatoVazio: Contato = { nome: "", cargo: "", cpf: "", email: "", telefon
 const DESTINATARIO = "geovane.silva@leucotron.com.br";
 
 function AprovacaoPage() {
+  const cfg = useProposalConfig();
+  const conectaPacote = getConectaPacote(cfg);
+  const agente = getAgentePlano(cfg);
+
+  const configResumo = useMemo(() => ([
+    {
+      id: "conecta",
+      solucao: "Conecta",
+      escolha: `Pacote de ${formatNumber(conectaPacote.mensagens)} mensagens/mês${cfg.conectaConfirmadorConsultas ? " · com Confirmador de Consultas" : ""}`,
+    },
+    {
+      id: "agente",
+      solucao: "Agente Inteligente",
+      escolha: `Plano ${agente.plano}`,
+    },
+    {
+      id: "flux",
+      solucao: "Flux 3.0",
+      escolha: cfg.fluxModalidade === "cloud" ? "Modalidade Cloud (SaaS mensal)" : "Modalidade On-Premise (licenciamento anual)",
+    },
+    {
+      id: "voicebot",
+      solucao: "VoiceBOT",
+      escolha:
+        cfg.voicebotModo === "off"
+          ? "Não incluído nesta proposta"
+          : cfg.voicebotModo === "mensal"
+            ? "Contratação mensal"
+            : "Contratação anual à vista",
+    },
+    {
+      id: "sob-medida",
+      solucao: "Sob Medida",
+      escolha: `${cfg.sobMedidaFrentes.length} de ${sobMedidaFrentes.length} frentes${cfg.sobMedidaFrentes.length ? " · Frentes: " + cfg.sobMedidaFrentes.join(", ") : ""}`,
+    },
+  ]), [cfg, conectaPacote, agente]);
+
   const [leuEEntendi, setLeuEEntendi] = useState(false);
-  const [selecionadas, setSelecionadas] = useState<string[]>([]);
-  const [responsavel, setResponsavel] = useState<Contato>({ ...contatoVazio });
-  const [testemunha, setTestemunha] = useState<Contato>({ ...contatoVazio });
-  const [tecnico, setTecnico] = useState<Contato>({ ...contatoVazio });
-  const [enviado, setEnviado] = useState(false);
+
 
   const podeEnviar = useMemo(() => {
     if (!leuEEntendi || selecionadas.length === 0) return false;
