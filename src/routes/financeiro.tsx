@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { SectionTitle, StatCard } from "@/components/leucotron/brand";
 import { SegmentedToggle } from "@/components/leucotron/segmented-toggle";
 import {
@@ -14,6 +15,9 @@ import {
   getConectaPacote, getAgentePlano,
   type FluxModalidade, type VoiceBotModo,
 } from "@/lib/proposal-config";
+
+type VisaoTotal = "mensal" | "anual";
+
 
 
 export const Route = createFileRoute("/financeiro")({
