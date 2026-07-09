@@ -168,6 +168,15 @@ function AprovacaoPage() {
     }
     y += 10;
 
+    section("Configuração escolhida");
+    configResumo
+      .filter((r) => selecionadas.includes(r.id))
+      .forEach((r) => {
+        line(r.solucao, r.escolha);
+      });
+    y += 10;
+
+
     const bloco = (titulo: string, c: Contato) => {
       section(titulo);
       line("Nome completo", c.nome);
