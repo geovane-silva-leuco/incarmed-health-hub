@@ -222,6 +222,13 @@ function AprovacaoPage() {
       "SOLUÇÕES APROVADAS:",
       sols || "  (nenhuma)",
       "",
+      "CONFIGURAÇÃO ESCOLHIDA:",
+      configResumo
+        .filter((r) => selecionadas.includes(r.id))
+        .map((r) => `  - ${r.solucao}: ${r.escolha}`)
+        .join("\n") || "  (nenhuma)",
+
+      "",
       "RESPONSÁVEL PELA CONTRATAÇÃO E ASSINATURA:",
       contatoTxt(responsavel),
       "",
