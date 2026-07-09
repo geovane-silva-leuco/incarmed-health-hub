@@ -86,6 +86,12 @@ function AprovacaoPage() {
   ]), [cfg, conectaPacote, agente]);
 
   const [leuEEntendi, setLeuEEntendi] = useState(false);
+  const [selecionadas, setSelecionadas] = useState<string[]>([]);
+  const [responsavel, setResponsavel] = useState<Contato>({ ...contatoVazio });
+  const [testemunha, setTestemunha] = useState<Contato>({ ...contatoVazio });
+  const [tecnico, setTecnico] = useState<Contato>({ ...contatoVazio });
+  const [enviado, setEnviado] = useState(false);
+
 
 
   const podeEnviar = useMemo(() => {
