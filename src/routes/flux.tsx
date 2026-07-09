@@ -86,18 +86,54 @@ function FluxPage() {
                 <th className="px-4 py-3 text-right font-semibold">Qtd.</th>
                 <th className="px-4 py-3 text-right font-semibold">Unitário</th>
                 <th className="px-4 py-3 text-right font-semibold">Total</th>
+                <th className="px-4 py-3 text-left font-semibold">Pgto</th>
               </tr>
             </thead>
             <tbody>
-              {m.itens.map((it, i) => (
-                <tr key={i} className={i % 2 ? "bg-[var(--brand-surface)]" : "bg-white"}>
-                  <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">{it.ref}</td>
-                  <td className="px-4 py-2.5">{it.desc}</td>
-                  <td className="px-4 py-2.5 text-right">{it.qtd}</td>
-                  <td className="px-4 py-2.5 text-right">{it.unitario === 0 ? "—" : formatBRL(it.unitario)}</td>
-                  <td className="px-4 py-2.5 text-right font-semibold">{it.total === 0 ? "Incluso" : formatBRL(it.total)}</td>
-                </tr>
-              ))}
+              {m.itens.map((it, i) => {
+                const incluso = it.unitario === 0 && it.total === 0;
+                return (
+                  <tr
+                    key={i}
+                    className={
+                      incluso
+                        ? "border-l-2 border-[var(--brand-cyan)]/40 bg-[var(--brand-cyan)]/5"
+                        : i % 2
+                          ? "bg-[var(--brand-surface)]"
+                          : "bg-white"
+                    }
+                  >
+                    <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">{it.ref}</td>
+                    <td className={`px-4 py-2.5 ${incluso ? "pl-8 text-muted-foreground" : ""}`}>
+                      {incluso ? "↳ " : ""}{it.desc}
+                    </td>
+                    <td className="px-4 py-2.5 text-right">{it.qtd}</td>
+                    <td className={`px-4 py-2.5 text-right ${incluso ? "text-[10px] font-bold uppercase tracking-wider text-[var(--brand-cyan)]" : ""}`}>
+                      {incluso ? "INCLUSO" : formatBRL(it.unitario)}
+                    </td>
+                    <td className="px-4 py-2.5 text-right font-semibold">
+                      {incluso ? "–" : formatBRL(it.total)}
+                    </td>
+                    <td className={`px-4 py-2.5 text-xs ${incluso ? "italic text-muted-foreground" : "text-muted-foreground"}`}>
+                      {incluso ? "Incluso" : isCloud ? "Mensal" : "Anual"}
+                    </td>
+                  </tr>
+                );
+              })}
+              {/* Linha de ativação — visualmente separada da recorrência */}
+              <tr>
+                <td colSpan={6} className="px-4 pb-1 pt-4 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  Investimento único (não somar à recorrência)
+                </td>
+              </tr>
+              <tr className="border-t-2 border-dashed border-[var(--brand-navy)]/30 bg-amber-50/60">
+                <td className="px-4 py-3 font-mono text-xs text-muted-foreground">SV03379</td>
+                <td className="px-4 py-3 font-semibold text-[var(--brand-navy)]">Ativação do Flux 3.0</td>
+                <td className="px-4 py-3 text-right">1</td>
+                <td className="px-4 py-3 text-right">{formatBRL(m.ativacaoUnica)}</td>
+                <td className="px-4 py-3 text-right font-semibold">{formatBRL(m.ativacaoUnica)}</td>
+                <td className="px-4 py-3 text-xs font-semibold text-amber-800">Única</td>
+              </tr>
             </tbody>
           </table>
         </div>
