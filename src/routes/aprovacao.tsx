@@ -1,8 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { FileSignature, Download, Mail, CheckCircle2 } from "lucide-react";
+import { FileSignature, Download, Mail, CheckCircle2, Settings2 } from "lucide-react";
 import jsPDF from "jspdf";
 import { SectionTitle } from "@/components/leucotron/brand";
+import { useProposalConfig, getConectaPacote, getAgentePlano } from "@/lib/proposal-config";
+import { sobMedidaFrentes } from "@/data/pricing";
+import { formatNumber } from "@/lib/format";
+
 
 /**
  * Página de aprovação da proposta.
@@ -44,12 +48,51 @@ const contatoVazio: Contato = { nome: "", cargo: "", cpf: "", email: "", telefon
 const DESTINATARIO = "geovane.silva@leucotron.com.br";
 
 function AprovacaoPage() {
+  const cfg = useProposalConfig();
+  const conectaPacote = getConectaPacote(cfg);
+  const agente = getAgentePlano(cfg);
+
+  const configResumo = useMemo(() => ([
+    {
+      id: "conecta",
+      solucao: "Conecta",
+      escolha: `Pacote de ${formatNumber(conectaPacote.mensagens)} mensagens/mês${cfg.conectaConfirmadorConsultas ? " · com Confirmador de Consultas" : ""}`,
+    },
+    {
+      id: "agente",
+      solucao: "Agente Inteligente",
+      escolha: `Plano ${agente.plano}`,
+    },
+    {
+      id: "flux",
+      solucao: "Flux 3.0",
+      escolha: cfg.fluxModalidade === "cloud" ? "Modalidade Cloud (SaaS mensal)" : "Modalidade On-Premise (licenciamento anual)",
+    },
+    {
+      id: "voicebot",
+      solucao: "VoiceBOT",
+      escolha:
+        cfg.voicebotModo === "off"
+          ? "Não incluído nesta proposta"
+          : cfg.voicebotModo === "mensal"
+            ? "Contratação mensal"
+            : "Contratação anual à vista",
+    },
+    {
+      id: "sob-medida",
+      solucao: "Sob Medida",
+      escolha: `${cfg.sobMedidaFrentes.length} de ${sobMedidaFrentes.length} frentes${cfg.sobMedidaFrentes.length ? " · Frentes: " + cfg.sobMedidaFrentes.join(", ") : ""}`,
+    },
+  ]), [cfg, conectaPacote, agente]);
+
   const [leuEEntendi, setLeuEEntendi] = useState(false);
   const [selecionadas, setSelecionadas] = useState<string[]>([]);
   const [responsavel, setResponsavel] = useState<Contato>({ ...contatoVazio });
   const [testemunha, setTestemunha] = useState<Contato>({ ...contatoVazio });
   const [tecnico, setTecnico] = useState<Contato>({ ...contatoVazio });
   const [enviado, setEnviado] = useState(false);
+
+
 
   const podeEnviar = useMemo(() => {
     if (!leuEEntendi || selecionadas.length === 0) return false;
@@ -125,6 +168,15 @@ function AprovacaoPage() {
     }
     y += 10;
 
+    section("Configuração escolhida");
+    configResumo
+      .filter((r) => selecionadas.includes(r.id))
+      .forEach((r) => {
+        line(r.solucao, r.escolha);
+      });
+    y += 10;
+
+
     const bloco = (titulo: string, c: Contato) => {
       section(titulo);
       line("Nome completo", c.nome);
@@ -169,6 +221,13 @@ function AprovacaoPage() {
       "",
       "SOLUÇÕES APROVADAS:",
       sols || "  (nenhuma)",
+      "",
+      "CONFIGURAÇÃO ESCOLHIDA:",
+      configResumo
+        .filter((r) => selecionadas.includes(r.id))
+        .map((r) => `  - ${r.solucao}: ${r.escolha}`)
+        .join("\n") || "  (nenhuma)",
+
       "",
       "RESPONSÁVEL PELA CONTRATAÇÃO E ASSINATURA:",
       contatoTxt(responsavel),
@@ -279,6 +338,33 @@ function AprovacaoPage() {
             })}
           </div>
         </div>
+
+        {/* Resumo da configuração escolhida — cruzamento com a proposal-config global */}
+        <div className="rounded-xl border border-[var(--brand-cyan)]/50 bg-[var(--brand-cyan)]/5 p-6 shadow-sm">
+          <div className="flex items-center gap-2 text-[var(--brand-navy)]">
+            <Settings2 className="h-4 w-4 text-[var(--brand-cyan)]" />
+            <h3 className="text-sm font-semibold uppercase tracking-wider">Configuração escolhida na proposta</h3>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Confirme abaixo o que está sendo aprovado. Ajustes de plano/pacote são feitos na tela <strong>Financeiro Consolidado</strong>.
+          </p>
+          <div className="mt-4 divide-y divide-[var(--brand-cyan)]/20">
+            {configResumo.map((r) => {
+              const marcada = selecionadas.includes(r.id);
+              return (
+                <div key={r.id} className={`flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${marcada ? "" : "opacity-40"}`}>
+                  <p className="text-sm font-semibold text-[var(--brand-navy)]">
+                    {r.solucao}
+                    {!marcada && <span className="ml-2 text-[10px] font-normal uppercase text-muted-foreground">(não selecionada)</span>}
+                  </p>
+                  <p className="text-sm text-foreground sm:text-right">{r.escolha}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+
 
         <ContatoForm
           titulo="Responsável pela contratação e assinatura"
