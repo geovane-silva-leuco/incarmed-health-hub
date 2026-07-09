@@ -1,8 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { FileSignature, Download, Mail, CheckCircle2 } from "lucide-react";
+import { FileSignature, Download, Mail, CheckCircle2, Settings2 } from "lucide-react";
 import jsPDF from "jspdf";
 import { SectionTitle } from "@/components/leucotron/brand";
+import { useProposalConfig, getConectaPacote, getAgentePlano } from "@/lib/proposal-config";
+import { sobMedidaFrentes } from "@/data/pricing";
+import { formatNumber } from "@/lib/format";
+
 
 /**
  * Página de aprovação da proposta.
