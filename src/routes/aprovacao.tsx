@@ -339,6 +339,33 @@ function AprovacaoPage() {
           </div>
         </div>
 
+        {/* Resumo da configuração escolhida — cruzamento com a proposal-config global */}
+        <div className="rounded-xl border border-[var(--brand-cyan)]/50 bg-[var(--brand-cyan)]/5 p-6 shadow-sm">
+          <div className="flex items-center gap-2 text-[var(--brand-navy)]">
+            <Settings2 className="h-4 w-4 text-[var(--brand-cyan)]" />
+            <h3 className="text-sm font-semibold uppercase tracking-wider">Configuração escolhida na proposta</h3>
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Confirme abaixo o que está sendo aprovado. Ajustes de plano/pacote são feitos na tela <strong>Financeiro Consolidado</strong>.
+          </p>
+          <div className="mt-4 divide-y divide-[var(--brand-cyan)]/20">
+            {configResumo.map((r) => {
+              const marcada = selecionadas.includes(r.id);
+              return (
+                <div key={r.id} className={`flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${marcada ? "" : "opacity-40"}`}>
+                  <p className="text-sm font-semibold text-[var(--brand-navy)]">
+                    {r.solucao}
+                    {!marcada && <span className="ml-2 text-[10px] font-normal uppercase text-muted-foreground">(não selecionada)</span>}
+                  </p>
+                  <p className="text-sm text-foreground sm:text-right">{r.escolha}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+
+
         <ContatoForm
           titulo="Responsável pela contratação e assinatura"
           descricao="Pessoa autorizada a assinar o contrato pela Incarmed."
