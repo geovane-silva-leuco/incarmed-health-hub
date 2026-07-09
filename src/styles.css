@@ -5,27 +5,32 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition.
+ * Design system — Leucotron × Incarmed (redesign)
  *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
+ * Direção: proposta comercial premium, não painel administrativo.
+ * Paleta: --ink (carvão quente), --paper (branco quente para leitura),
+ * --signal (âmbar-cobre, usar com escassez — CTA/número-chave), --trust
+ * (azul-petróleo para dados).  Tipografia: Inter Tight (display),
+ * Public Sans (corpo), IBM Plex Mono (números tabulares).
  *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ * Compatibilidade: legado --brand-navy/--brand-cyan é remapeado para os
+ * novos tokens para que componentes existentes herdem a paleta nova sem
+ * edições em cascata.
  */
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-2xl: 12px;
+  --radius-3xl: 14px;
+  --radius-4xl: 16px;
+
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Inter Tight", "Public Sans", ui-sans-serif, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -59,49 +64,70 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-ink: var(--ink);
+  --color-surface: var(--surface);
+  --color-paper: var(--paper);
+  --color-paper-ink: var(--paper-ink);
+  --color-signal: var(--signal);
+  --color-trust: var(--trust);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --radius: 0.5rem; /* 8px — discreto, consistente. Sem rounded-2xl/3xl por padrão */
 
-  /* Leucotron brand tokens */
-  --brand-navy: #0A1F44;
-  --brand-navy-2: #0E2A5C;
-  --brand-cyan: #00C2D1;
-  --brand-cyan-hi: #00E0FF;
-  --brand-surface: #F5F7FA;
+  /* Nova paleta de assinatura */
+  --ink: #16151A;
+  --surface: #201F26;
+  --paper: #F6F4EF;
+  --paper-ink: #1B1A1F;
+  --signal: #C9803E;      /* âmbar-cobre — usar com escassez */
+  --signal-hi: #E89A55;
+  --trust: #1F5C6B;       /* azul-petróleo — apenas dados/gráficos */
+  --line: rgba(246, 244, 239, 0.12);
+  --line-paper: rgba(27, 26, 31, 0.10);
+
+  /* Tokens semânticos shadcn remapeados para a nova paleta */
+  --background: #F6F4EF;
+  --foreground: #1B1A1F;
+  --card: #FFFFFF;
+  --card-foreground: #1B1A1F;
+  --popover: #FFFFFF;
+  --popover-foreground: #1B1A1F;
+  --primary: #16151A;
+  --primary-foreground: #F6F4EF;
+  --secondary: #EDEAE2;
+  --secondary-foreground: #1B1A1F;
+  --muted: #EDEAE2;
+  --muted-foreground: #6B6873;
+  --accent: #EDEAE2;
+  --accent-foreground: #1B1A1F;
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: #F6F4EF;
+  --border: rgba(27, 26, 31, 0.10);
+  --input: rgba(27, 26, 31, 0.14);
+  --ring: #C9803E;
+  --chart-1: #C9803E;
+  --chart-2: #1F5C6B;
+  --chart-3: #4A6670;
+  --chart-4: #A8551E;
+  --chart-5: #7C7A82;
+  --sidebar: #16151A;
+  --sidebar-foreground: #F6F4EF;
+  --sidebar-primary: #C9803E;
+  --sidebar-primary-foreground: #16151A;
+  --sidebar-accent: #201F26;
+  --sidebar-accent-foreground: #F6F4EF;
+  --sidebar-border: rgba(246, 244, 239, 0.10);
+  --sidebar-ring: #C9803E;
+
+  /* Legado — remapeia tokens antigos para a nova paleta para
+     que componentes existentes herdem sem edições em cascata. */
+  --brand-navy: #16151A;
+  --brand-navy-2: #201F26;
+  --brand-cyan: #C9803E;
+  --brand-cyan-hi: #E89A55;
+  --brand-surface: #F6F4EF;
 }
 
 @media print {
@@ -110,38 +136,25 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
+  --background: #16151A;
+  --foreground: #F6F4EF;
+  --card: #201F26;
+  --card-foreground: #F6F4EF;
+  --popover: #201F26;
+  --popover-foreground: #F6F4EF;
+  --primary: #F6F4EF;
+  --primary-foreground: #16151A;
+  --secondary: #2A2932;
+  --secondary-foreground: #F6F4EF;
+  --muted: #2A2932;
+  --muted-foreground: #A5A2AE;
+  --accent: #2A2932;
+  --accent-foreground: #F6F4EF;
   --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --destructive-foreground: #F6F4EF;
+  --border: rgba(246, 244, 239, 0.12);
+  --input: rgba(246, 244, 239, 0.18);
+  --ring: #C9803E;
 }
 
 @layer base {
@@ -149,16 +162,63 @@
     border-color: var(--color-border);
   }
 
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  /* Números tabulares por padrão em contextos financeiros */
+  .tabular,
+  [class*="tabular-nums"] {
+    font-variant-numeric: tabular-nums;
+    font-family: var(--font-mono);
   }
 }
 
-/* Quantum Lovable - watermark removal */
-#lovable-badge {
-  display: none !important;
+/* ----- Signal Trail (elemento de assinatura) ---------------------------- */
+@keyframes signal-pulse {
+  0%   { transform: scaleY(1);   opacity: 0.35; }
+  30%  { transform: scaleY(1.9); opacity: 1;   }
+  60%  { transform: scaleY(0.7); opacity: 0.85;}
+  100% { transform: scaleY(1);   opacity: 0.35;}
 }
+.signal-pulse { animation: signal-pulse 600ms ease-in-out; }
+
+@keyframes signal-ring {
+  0%   { transform: scale(0.6); opacity: 0.7; }
+  100% { transform: scale(2.2); opacity: 0;   }
+}
+.signal-ring-hover:hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1.5px solid var(--signal);
+  animation: signal-ring 700ms ease-out;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .signal-pulse,
+  .signal-ring-hover:hover::after { animation: none !important; }
+}
+
+/* Quantum Lovable - watermark removal */
+#lovable-badge { display: none !important; }
 a[href*="lovable.dev"],
 iframe[src*="lovable.dev"],
 div[style*="Edit with Lovable"],
@@ -170,4 +230,3 @@ div[style*="Edit with Lovable"],
   position: absolute !important;
   z-index: -9999 !important;
 }
-

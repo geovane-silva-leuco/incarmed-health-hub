@@ -11,9 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { AppSidebar } from "@/components/leucotron/app-sidebar";
+import { SignalTrail } from "@/components/leucotron/signal-trail";
 import { TopHeader } from "@/components/leucotron/header";
-import { FloatingCTA } from "@/components/leucotron/floating-cta";
 import { useTracking } from "@/hooks/use-tracking";
 
 
@@ -106,6 +105,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" },
     ],
     scripts: [
       {
@@ -161,16 +163,17 @@ function RootComponent() {
       >
         Pular para o conteúdo principal
       </a>
-      <div className="flex min-h-dvh w-full bg-[var(--brand-surface)]">
-        <AppSidebar />
-        <div className="flex min-w-0 flex-1 flex-col">
+      <div className="min-h-dvh w-full bg-[var(--paper)]">
+        <SignalTrail />
+        <div className="flex min-w-0 flex-col lg:pl-[220px]">
           <TopHeader />
-          <main id="conteudo-principal" className="min-w-0 flex-1 px-6 py-8 lg:px-10 print:px-0 print:py-0">
+          <main
+            id="conteudo-principal"
+            className="min-w-0 flex-1 px-6 py-16 md:px-10 md:py-24 lg:px-16 print:px-0 print:py-0"
+          >
             <Outlet />
           </main>
         </div>
-        {/* CTA persistente — Growth Hacking (Fogg B=MAP). Ocultado na home e ao imprimir. */}
-        <FloatingCTA />
       </div>
     </QueryClientProvider>
 
