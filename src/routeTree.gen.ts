@@ -19,6 +19,7 @@ import { Route as DependenciasRouteImport } from './routes/dependencias'
 import { Route as CronogramaRouteImport } from './routes/cronograma'
 import { Route as ConectaRouteImport } from './routes/conecta'
 import { Route as AprovacaoRouteImport } from './routes/aprovacao'
+import { Route as ApresentarRouteImport } from './routes/apresentar'
 import { Route as AgenteRouteImport } from './routes/agente'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
@@ -73,6 +74,11 @@ const AprovacaoRoute = AprovacaoRouteImport.update({
   path: '/aprovacao',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApresentarRoute = ApresentarRouteImport.update({
+  id: '/apresentar',
+  path: '/apresentar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AgenteRoute = AgenteRouteImport.update({
   id: '/agente',
   path: '/agente',
@@ -92,6 +98,7 @@ const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/agente': typeof AgenteRoute
+  '/apresentar': typeof ApresentarRoute
   '/aprovacao': typeof AprovacaoRoute
   '/conecta': typeof ConectaRoute
   '/cronograma': typeof CronogramaRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/agente': typeof AgenteRoute
+  '/apresentar': typeof ApresentarRoute
   '/aprovacao': typeof AprovacaoRoute
   '/conecta': typeof ConectaRoute
   '/cronograma': typeof CronogramaRoute
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/agente': typeof AgenteRoute
+  '/apresentar': typeof ApresentarRoute
   '/aprovacao': typeof AprovacaoRoute
   '/conecta': typeof ConectaRoute
   '/cronograma': typeof CronogramaRoute
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/agente'
+    | '/apresentar'
     | '/aprovacao'
     | '/conecta'
     | '/cronograma'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/agente'
+    | '/apresentar'
     | '/aprovacao'
     | '/conecta'
     | '/cronograma'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/agente'
+    | '/apresentar'
     | '/aprovacao'
     | '/conecta'
     | '/cronograma'
@@ -186,6 +198,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgenteRoute: typeof AgenteRoute
+  ApresentarRoute: typeof ApresentarRoute
   AprovacaoRoute: typeof AprovacaoRoute
   ConectaRoute: typeof ConectaRoute
   CronogramaRoute: typeof CronogramaRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AprovacaoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/apresentar': {
+      id: '/apresentar'
+      path: '/apresentar'
+      fullPath: '/apresentar'
+      preLoaderRoute: typeof ApresentarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/agente': {
       id: '/agente'
       path: '/agente'
@@ -298,6 +318,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgenteRoute: AgenteRoute,
+  ApresentarRoute: ApresentarRoute,
   AprovacaoRoute: AprovacaoRoute,
   ConectaRoute: ConectaRoute,
   CronogramaRoute: CronogramaRoute,
@@ -313,13 +334,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
