@@ -1,15 +1,15 @@
-import { Printer } from "lucide-react";
+import { Printer, PlayCircle } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 
 /**
- * Cabeçalho superior — sticky. A sidebar principal agora fica visível
- * em todos os tamanhos de tela, então não há mais botão hambúrguer.
+ * Cabeçalho superior — sticky. Expõe o botão "Apresentar ao cliente"
+ * (modo slide fullscreen) e a exportação PDF via print.
  */
 export function TopHeader() {
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-white/95 px-4 backdrop-blur lg:px-6 print:hidden">
       <div className="flex items-center gap-3">
-
         <span className="rounded-md bg-[var(--brand-navy)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--brand-cyan)]">
           Cliente
         </span>
@@ -19,9 +19,19 @@ export function TopHeader() {
         </span>
       </div>
       <div className="flex items-center gap-2">
-        <span className="hidden text-xs text-muted-foreground md:inline">
+        <span className="hidden text-xs text-muted-foreground lg:inline">
           Válido em 11/06/2026
         </span>
+        <Button
+          asChild
+          size="sm"
+          className="bg-[var(--brand-cyan)] text-[var(--brand-navy)] hover:bg-[var(--brand-cyan)]/90"
+        >
+          <Link to="/apresentar">
+            <PlayCircle className="mr-2 h-4 w-4" aria-hidden="true" />
+            <span>Apresentar ao cliente</span>
+          </Link>
+        </Button>
         <Button
           variant="outline"
           size="sm"
@@ -29,7 +39,7 @@ export function TopHeader() {
           onClick={() => window.print()}
         >
           <Printer className="mr-2 h-4 w-4" aria-hidden="true" />
-          <span>Exportar PDF</span>
+          <span className="hidden sm:inline">Exportar PDF</span>
         </Button>
       </div>
     </header>
