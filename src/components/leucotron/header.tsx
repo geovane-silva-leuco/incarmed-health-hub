@@ -1,47 +1,26 @@
-import { Printer, PlayCircle } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { PlayCircle } from "lucide-react";
 
 /**
- * Cabeçalho superior — sticky. Expõe o botão "Apresentar ao cliente"
- * (modo slide fullscreen) e a exportação PDF via print.
+ * TopBar — barra superior mínima. Substitui o topbar de admin.
+ * Wordmark discreto + 1 único CTA persistente ("Apresentar ao cliente").
+ * Fica sólido sobre --paper; sem sombra, sem gradiente.
  */
 export function TopHeader() {
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-white/95 px-4 backdrop-blur lg:px-6 print:hidden">
-      <div className="flex items-center gap-3">
-        <span className="rounded-md bg-[var(--brand-navy)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--brand-cyan)]">
-          Cliente
-        </span>
-        <span className="text-sm font-semibold text-[var(--brand-navy)]">Incarmed</span>
-        <span className="hidden text-xs text-muted-foreground md:inline">
-          · Hospital / Clínica · Bahia
+    <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[var(--line-paper)] bg-[var(--paper)]/85 px-6 backdrop-blur print:hidden">
+      <div className="flex items-baseline gap-3">
+        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--paper-ink)]/55">
+          Proposta · Incarmed × Leucotron
         </span>
       </div>
-      <div className="flex items-center gap-2">
-        <span className="hidden text-xs text-muted-foreground lg:inline">
-          Válido em 11/06/2026
-        </span>
-        <Button
-          asChild
-          size="sm"
-          className="bg-[var(--brand-cyan)] text-[var(--brand-navy)] hover:bg-[var(--brand-cyan)]/90"
-        >
-          <Link to="/apresentar">
-            <PlayCircle className="mr-2 h-4 w-4" aria-hidden="true" />
-            <span>Apresentar ao cliente</span>
-          </Link>
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="border-[var(--brand-navy)]/20 text-[var(--brand-navy)] hover:bg-[var(--brand-navy)] hover:text-white"
-          onClick={() => window.print()}
-        >
-          <Printer className="mr-2 h-4 w-4" aria-hidden="true" />
-          <span className="hidden sm:inline">Exportar PDF</span>
-        </Button>
-      </div>
+      <Link
+        to="/apresentar"
+        className="signal-ring-hover relative inline-flex items-center gap-2 rounded-md bg-[var(--ink)] px-3.5 py-1.5 text-[12px] font-semibold text-[var(--paper)] transition hover:bg-[var(--surface)]"
+      >
+        <PlayCircle className="h-3.5 w-3.5 text-[var(--signal)]" />
+        Apresentar ao cliente
+      </Link>
     </header>
   );
 }
