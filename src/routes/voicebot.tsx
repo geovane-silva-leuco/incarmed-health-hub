@@ -24,21 +24,40 @@ function VoiceBotPage() {
         icon={<Mic className="h-7 w-7" />}
       />
 
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[var(--brand-cyan)]/40 bg-[var(--brand-cyan)]/5 p-5">
-        <div>
-          <p className="text-sm font-semibold text-[var(--brand-navy)]">Demonstração ao vivo do VoiceBOT</p>
-          <p className="text-xs text-muted-foreground">Fale agora com um agente de voz real — sem instalar nada.</p>
+      <div className="mb-6 rounded-xl border border-[var(--brand-cyan)]/40 bg-[var(--brand-cyan)]/5 p-5">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-md">
+            <p className="text-sm font-semibold text-[var(--brand-navy)]">Demonstração ao vivo do VoiceBOT</p>
+            <p className="text-xs text-muted-foreground">Fale agora com um agente de voz real — sem instalar nada.</p>
+          </div>
+          <a
+            href="https://clicktocall.leucotron.com.br/clicktocall/vendas-leucotron/ligar?token=90aac52d33b38d9517193a63f2c73037"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-navy)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-cyan)]"
+          >
+            <PhoneCall className="h-5 w-5" aria-hidden="true" />
+            Ligue agora
+          </a>
         </div>
-        <a
-          href="https://clicktocall.leucotron.com.br/clicktocall/vendas-leucotron/ligar?token=90aac52d33b38d9517193a63f2c73037"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg bg-[var(--brand-navy)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-cyan)]"
-        >
-          <PhoneCall className="h-5 w-5" aria-hidden="true" />
-          Ligue agora
-        </a>
+
+        <div className="mt-4 rounded-lg border border-[var(--brand-cyan)]/30 bg-white p-4">
+          <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-[var(--brand-navy)]">
+            Como testar em 2 passos
+          </p>
+          <ol className="space-y-2.5 text-sm">
+            <li className="flex items-start gap-3">
+              <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-[var(--brand-navy)] text-xs font-bold text-white">1</span>
+              <span>Ao ligar, escolha a <strong>opção 1</strong> no menu.</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="flex h-6 w-6 flex-none items-center justify-center rounded-full bg-[var(--brand-navy)] text-xs font-bold text-white">2</span>
+              <span>Quando o <strong>Thomaz</strong> (nosso atendente de IA) atender, diga: <em>"quero marcar uma consulta"</em>.</span>
+            </li>
+          </ol>
+        </div>
       </div>
+
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard label="Mensal recorrente" value={formatBRL(voicebot.valorMensal)} hint="Inclui plataforma + 1 agente + 1 número" accent />
