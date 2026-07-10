@@ -1,11 +1,11 @@
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 /**
  * Componentes de marca — versão redesenhada.
  *
  * O sistema visual agora é sustentado pela tipografia (Inter Tight display,
  * Public Sans corpo, IBM Plex Mono para números) e por um único acento
- * cromático (`--signal`, âmbar-cobre). Nada de gradientes, dot-grids ou
+ * cromático (`--signal`, azul Leucotron). Nada de gradientes, dot-grids ou
  * banners decorativos.
  */
 
@@ -25,27 +25,75 @@ export function DotGrid(_: { rows?: number; cols?: number; className?: string })
   return null;
 }
 
+/**
+ * Barra compacta fixa que aparece quando o H1 da seção sai da viewport.
+ * Renderizada via portal para escapar do container do conteúdo e ficar
+ * ancorada logo abaixo do TopHeader global (h-14).
+ */
+function StickyTitleBar({ visible, title, theme }: { visible: boolean; title: string; theme: "ink" | "paper" }) {
+  const dark = theme === "ink";
+  return (
+    <div
+      aria-hidden={!visible}
+      className={`fixed left-0 right-0 top-14 z-10 border-b transition-opacity duration-200 print:hidden ${
+        visible ? "opacity-100" : "pointer-events-none opacity-0"
+      } ${
+        dark
+          ? "border-[var(--surface)] bg-[var(--ink)]/95 text-[var(--paper)]"
+          : "border-[var(--line-paper)] bg-[var(--paper)]/95 text-[var(--ink)]"
+      } backdrop-blur`}
+      style={{ paddingLeft: "var(--main-pl, 0px)", paddingRight: "var(--main-pr, 0px)" }}
+    >
+      <div className="flex h-10 items-center px-6">
+        <span className="font-display text-sm font-semibold tracking-tight">
+          {title}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function useHeadingVisibility<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null);
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { rootMargin: "-64px 0px 0px 0px", threshold: 0 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return { ref, visible };
+}
+
 export function SectionTitle({
   eyebrow,
   title,
   description,
 }: { eyebrow?: string; title: string; description?: string }) {
+  const { ref, visible } = useHeadingVisibility<HTMLHeadingElement>();
   return (
-    <header className="mb-10 max-w-4xl">
-      {eyebrow && (
-        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
-          {eyebrow}
-        </p>
-      )}
-      <h1 className="font-display text-4xl font-semibold text-[var(--ink)] md:text-5xl">
-        {title}
-      </h1>
-      {description && (
-        <p className="mt-5 max-w-2xl text-base leading-relaxed text-[var(--paper-ink)]/70 md:text-[17px]">
-          {description}
-        </p>
-      )}
-    </header>
+    <>
+      <StickyTitleBar visible={!visible} title={title} theme="paper" />
+      <header className="mb-10 max-w-4xl">
+        {eyebrow && (
+          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
+            {eyebrow}
+          </p>
+        )}
+        <h1 ref={ref} className="font-display text-4xl font-semibold text-[var(--ink)] md:text-5xl">
+          {title}
+        </h1>
+        {description && (
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[var(--paper-ink)]/70 md:text-[17px]">
+            {description}
+          </p>
+        )}
+      </header>
+    </>
   );
 }
 
@@ -59,20 +107,24 @@ export function ProductBanner({
   subtitle,
   icon: _icon,
 }: { eyebrow: string; title: string; subtitle?: string; icon?: ReactNode }) {
+  const { ref, visible } = useHeadingVisibility<HTMLHeadingElement>();
   return (
-    <header className="mb-12 border-b border-[var(--line-paper)] pb-10">
-      <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
-        {eyebrow}
-      </p>
-      <h1 className="font-display text-4xl font-semibold text-[var(--ink)] md:text-6xl">
-        {title}
-      </h1>
-      {subtitle && (
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--paper-ink)]/70">
-          {subtitle}
+    <>
+      <StickyTitleBar visible={!visible} title={title} theme="paper" />
+      <header className="mb-12 border-b border-[var(--line-paper)] pb-10">
+        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
+          {eyebrow}
         </p>
-      )}
-    </header>
+        <h1 ref={ref} className="font-display text-4xl font-semibold text-[var(--ink)] md:text-6xl">
+          {title}
+        </h1>
+        {subtitle && (
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--paper-ink)]/70">
+            {subtitle}
+          </p>
+        )}
+      </header>
+    </>
   );
 }
 
