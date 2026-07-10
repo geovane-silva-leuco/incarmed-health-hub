@@ -165,7 +165,7 @@
   --destructive-foreground: #F4F4F5;
   --border: rgba(244, 244, 245, 0.12);
   --input: rgba(244, 244, 245, 0.18);
-  --ring: #C9803E;
+  --ring: #0F61FF;
 }
 
 @layer base {
