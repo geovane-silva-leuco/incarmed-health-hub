@@ -76,34 +76,43 @@
 :root {
   --radius: 0.5rem; /* 8px — discreto, consistente. Sem rounded-2xl/3xl por padrão */
 
-  /* Nova paleta de assinatura */
+  /* Nova paleta de assinatura — paper NEUTRO (não bege/creme) */
   --ink: #16151A;
   --surface: #201F26;
-  --paper: #F6F4EF;
+  --paper: #F4F4F5;         /* cinza-papel neutro (zinc-100) — sem amarelo */
   --paper-ink: #1B1A1F;
-  --signal: #C9803E;      /* âmbar-cobre — usar com escassez */
+  --signal: #C9803E;        /* âmbar-cobre — usar com escassez */
   --signal-hi: #E89A55;
-  --trust: #1F5C6B;       /* azul-petróleo — apenas dados/gráficos */
-  --line: rgba(246, 244, 239, 0.12);
+  --trust: #1F5C6B;         /* azul-petróleo — apenas dados/gráficos */
+  --line: rgba(244, 244, 245, 0.12);
   --line-paper: rgba(27, 26, 31, 0.10);
 
+  /* Container e escala tipográfica desktop (1280–2560) */
+  --container-max: 1200px;
+  --container-pad: clamp(1.5rem, 3vw, 4rem);
+  --fs-display: clamp(2.5rem, 3.4vw + 1rem, 4.5rem);
+  --fs-h2: clamp(1.5rem, 1.2vw + 1rem, 2.25rem);
+  --fs-body: clamp(0.95rem, 0.25vw + 0.85rem, 1.0625rem);
+  --section-y: clamp(3rem, 6vw, 6.5rem);
+
   /* Tokens semânticos shadcn remapeados para a nova paleta */
-  --background: #F6F4EF;
+  --background: #F4F4F5;
   --foreground: #1B1A1F;
   --card: #FFFFFF;
   --card-foreground: #1B1A1F;
   --popover: #FFFFFF;
   --popover-foreground: #1B1A1F;
+
   --primary: #16151A;
-  --primary-foreground: #F6F4EF;
-  --secondary: #EDEAE2;
+  --primary-foreground: #F4F4F5;
+  --secondary: #E7E7EA;
   --secondary-foreground: #1B1A1F;
-  --muted: #EDEAE2;
+  --muted: #E7E7EA;
   --muted-foreground: #6B6873;
-  --accent: #EDEAE2;
+  --accent: #E7E7EA;
   --accent-foreground: #1B1A1F;
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: #F6F4EF;
+  --destructive-foreground: #F4F4F5;
   --border: rgba(27, 26, 31, 0.10);
   --input: rgba(27, 26, 31, 0.14);
   --ring: #C9803E;
@@ -113,12 +122,12 @@
   --chart-4: #A8551E;
   --chart-5: #7C7A82;
   --sidebar: #16151A;
-  --sidebar-foreground: #F6F4EF;
+  --sidebar-foreground: #F4F4F5;
   --sidebar-primary: #C9803E;
   --sidebar-primary-foreground: #16151A;
   --sidebar-accent: #201F26;
-  --sidebar-accent-foreground: #F6F4EF;
-  --sidebar-border: rgba(246, 244, 239, 0.10);
+  --sidebar-accent-foreground: #F4F4F5;
+  --sidebar-border: rgba(244, 244, 245, 0.10);
   --sidebar-ring: #C9803E;
 
   /* Legado — remapeia tokens antigos para a nova paleta para
@@ -127,7 +136,7 @@
   --brand-navy-2: #201F26;
   --brand-cyan: #C9803E;
   --brand-cyan-hi: #E89A55;
-  --brand-surface: #F6F4EF;
+  --brand-surface: #F4F4F5;
 }
 
 @media print {
@@ -137,23 +146,23 @@
 
 .dark {
   --background: #16151A;
-  --foreground: #F6F4EF;
+  --foreground: #F4F4F5;
   --card: #201F26;
-  --card-foreground: #F6F4EF;
+  --card-foreground: #F4F4F5;
   --popover: #201F26;
-  --popover-foreground: #F6F4EF;
-  --primary: #F6F4EF;
+  --popover-foreground: #F4F4F5;
+  --primary: #F4F4F5;
   --primary-foreground: #16151A;
   --secondary: #2A2932;
-  --secondary-foreground: #F6F4EF;
+  --secondary-foreground: #F4F4F5;
   --muted: #2A2932;
   --muted-foreground: #A5A2AE;
   --accent: #2A2932;
-  --accent-foreground: #F6F4EF;
+  --accent-foreground: #F4F4F5;
   --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: #F6F4EF;
-  --border: rgba(246, 244, 239, 0.12);
-  --input: rgba(246, 244, 239, 0.18);
+  --destructive-foreground: #F4F4F5;
+  --border: rgba(244, 244, 245, 0.12);
+  --input: rgba(244, 244, 245, 0.18);
   --ring: #C9803E;
 }
 
@@ -188,6 +197,31 @@
     font-family: var(--font-mono);
   }
 }
+
+/* ----- Container e escala desktop (1280 / 1440 / 1536 / 1920 / 2560) ---- */
+.app-shell {
+  /* deslocamento horizontal do bloco central para ancorar a trilha */
+  --shell-offset: max(0px, calc((100vw - var(--container-max) - 220px) / 2));
+  --main-pl: 0px;
+  --main-pr: 0px;
+}
+@media (min-width: 1024px) {
+  .app-shell { --main-pl: calc(var(--shell-offset) + 220px); --main-pr: var(--shell-offset); }
+}
+
+.app-container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+.display-xl { font-size: var(--fs-display); line-height: 1.03; letter-spacing: -0.025em; }
+.section-y { padding-block: var(--section-y); }
+
+/* Números em colunas numéricas de tabelas — não esticar em telas largas */
+table.finance-table { table-layout: fixed; width: 100%; }
+table.finance-table th.num,
+table.finance-table td.num { width: 12ch; text-align: right; font-variant-numeric: tabular-nums; }
+
 
 /* ----- Signal Trail (elemento de assinatura) ---------------------------- */
 @keyframes signal-pulse {
