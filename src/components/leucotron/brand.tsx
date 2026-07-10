@@ -47,7 +47,10 @@ function StickyTitleBar({ visible, title, theme }: { visible: boolean; title: st
           : "border-[var(--line-paper)] bg-[var(--paper)]/95 text-[var(--ink)]"
       } backdrop-blur`}
     >
-      <div className="mx-auto flex h-10 max-w-[1200px] items-center px-6">
+      <div
+        className="flex h-10 items-center px-6"
+        style={{ paddingLeft: "calc(var(--main-pl, 0px) + 1.5rem)", paddingRight: "calc(var(--main-pr, 0px) + 1.5rem)" }}
+      >
         <span className="font-display text-sm font-semibold tracking-tight">
           {title}
         </span>
