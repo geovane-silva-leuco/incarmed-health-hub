@@ -343,20 +343,142 @@ function AprovacaoPage() {
           </div>
         </div>
 
-        {/* Resumo da configuração escolhida — cruzamento com a proposal-config global */}
+        {/* Editor interativo da configuração — grava direto na ProposalConfig global */}
         <div className="rounded-xl border border-[var(--brand-cyan)]/50 bg-[var(--brand-cyan)]/5 p-6 shadow-sm">
           <div className="flex items-center gap-2 text-[var(--brand-navy)]">
             <Settings2 className="h-4 w-4 text-[var(--brand-cyan)]" />
-            <h3 className="text-sm font-semibold uppercase tracking-wider">Configuração escolhida na proposta</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wider">Configuração da proposta</h3>
+            {enviado && (
+              <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-[var(--brand-navy)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+                <Lock className="h-3 w-3" /> Aprovada — travada
+              </span>
+            )}
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
-            Confirme abaixo o que está sendo aprovado. Ajustes de plano/pacote são feitos na tela <strong>Financeiro Consolidado</strong>.
+            {enviado
+              ? "A proposta foi aprovada. Para alterar plano/pacote agora é necessário reabrir a proposta."
+              : "Ajuste plano, modalidade e frentes diretamente aqui. Muda em tempo real na tela Financeiro Consolidado."}
           </p>
-          <div className="mt-4 divide-y divide-[var(--brand-cyan)]/20">
+
+          <div className="mt-5 grid grid-cols-1 gap-5 md:grid-cols-2">
+            <div className={selecionadas.includes("conecta") ? "" : "opacity-50"}>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Conecta · Pacote de mensagens</p>
+              <select
+                value={cfg.conectaPacoteMensagens}
+                onChange={(e) => setProposalConfig({ conectaPacoteMensagens: Number(e.target.value) })}
+                disabled={enviado}
+                className="w-full rounded-md border border-input bg-white px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+                aria-label="Pacote Conecta"
+              >
+                {conectaPacotesMensagens.map((p) => (
+                  <option key={p.mensagens} value={p.mensagens}>
+                    {formatNumber(p.mensagens)} msg — {formatBRL(p.valorMensal)}/mês
+                  </option>
+                ))}
+              </select>
+              <label className="mt-2 inline-flex cursor-pointer items-center gap-2 text-xs">
+                <input
+                  type="checkbox"
+                  checked={cfg.conectaConfirmadorConsultas}
+                  onChange={(e) => setProposalConfig({ conectaConfirmadorConsultas: e.target.checked })}
+                  disabled={enviado}
+                  className="h-4 w-4 accent-[var(--brand-cyan)] disabled:cursor-not-allowed"
+                />
+                Incluir <strong>Confirmador de Consultas</strong>
+              </label>
+            </div>
+
+            <div className={selecionadas.includes("agente") ? "" : "opacity-50"}>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Agente Inteligente</p>
+              <SegmentedToggle
+                ariaLabel="Plano do Agente Inteligente"
+                size="sm"
+                disabled={enviado}
+                value={cfg.agentePlano}
+                onChange={(v: PlanoAgente) => setProposalConfig({ agentePlano: v })}
+                options={agenteInteligentePlanos.map((p) => ({ value: p.plano, label: p.plano }))}
+              />
+            </div>
+
+            <div className={selecionadas.includes("flux") ? "" : "opacity-50"}>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Flux 3.0 · Modalidade</p>
+              <SegmentedToggle
+                ariaLabel="Modalidade do Flux 3.0"
+                size="sm"
+                disabled={enviado}
+                value={cfg.fluxModalidade}
+                onChange={(v: FluxModalidade) => setProposalConfig({ fluxModalidade: v })}
+                options={[
+                  { value: "cloud", label: "Cloud · Mensal" },
+                  { value: "onpremise", label: "On-Premise · Anual" },
+                ]}
+              />
+            </div>
+
+            <div className={selecionadas.includes("voicebot") ? "" : "opacity-50"}>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">VoiceBOT</p>
+              <SegmentedToggle
+                ariaLabel="Contratação do VoiceBOT"
+                size="sm"
+                disabled={enviado}
+                value={cfg.voicebotModo}
+                onChange={(v: VoiceBotModo) => setProposalConfig({ voicebotModo: v })}
+                options={[
+                  { value: "mensal", label: "Mensal" },
+                  { value: "anual", label: "Anual" },
+                  { value: "off", label: "Sem VoiceBOT" },
+                ]}
+              />
+            </div>
+
+            <div className={`md:col-span-2 ${selecionadas.includes("sob-medida") ? "" : "opacity-50"}`}>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Sob Medida · Frentes incluídas ({cfg.sobMedidaFrentes.length}/{sobMedidaFrentes.length})
+              </p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {sobMedidaFrentes.map((f) => {
+                  const incluida = cfg.sobMedidaFrentes.includes(f.id);
+                  return (
+                    <label
+                      key={f.id}
+                      className={`flex cursor-pointer items-start gap-2 rounded-md border p-2 text-xs transition-colors ${
+                        enviado ? "cursor-not-allowed opacity-70" : ""
+                      } ${
+                        incluida
+                          ? "border-[var(--brand-navy)] bg-white"
+                          : "border-border bg-white/50 hover:border-[var(--brand-navy)]/40"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={incluida}
+                        disabled={enviado}
+                        onChange={(e) => {
+                          const next = e.target.checked
+                            ? [...cfg.sobMedidaFrentes, f.id].sort((a, b) => a - b)
+                            : cfg.sobMedidaFrentes.filter((id) => id !== f.id);
+                          setProposalConfig({ sobMedidaFrentes: next });
+                        }}
+                        className="mt-0.5 h-4 w-4 accent-[var(--brand-navy)] disabled:cursor-not-allowed"
+                      />
+                      <span className="leading-snug text-[var(--brand-navy)]">
+                        <strong>Frente {f.id}.</strong> {f.titulo}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 divide-y divide-[var(--brand-cyan)]/20 border-t border-[var(--brand-cyan)]/30 pt-4">
+            <p className="pb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Resumo do que será aprovado
+            </p>
             {configResumo.map((r) => {
               const marcada = selecionadas.includes(r.id);
               return (
-                <div key={r.id} className={`flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${marcada ? "" : "opacity-40"}`}>
+                <div key={r.id} className={`flex flex-col gap-1 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${marcada ? "" : "opacity-40"}`}>
                   <p className="text-sm font-semibold text-[var(--brand-navy)]">
                     {r.solucao}
                     {!marcada && <span className="ml-2 text-[10px] font-normal uppercase text-muted-foreground">(não selecionada)</span>}
