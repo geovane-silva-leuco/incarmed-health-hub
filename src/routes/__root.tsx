@@ -163,18 +163,19 @@ function RootComponent() {
       >
         Pular para o conteúdo principal
       </a>
-      <div className="min-h-dvh w-full bg-[var(--paper)]">
+      <div className="app-shell min-h-dvh w-full bg-[var(--paper)]">
         <SignalTrail />
         <div className="flex min-w-0 flex-col lg:pl-[220px]">
           <TopHeader />
           <main
             id="conteudo-principal"
-            className="min-w-0 flex-1 px-6 py-16 md:px-10 md:py-24 lg:px-16 print:px-0 print:py-0"
+            className="app-container min-w-0 flex-1 py-16 md:py-24 print:py-0"
           >
             <Outlet />
           </main>
         </div>
       </div>
+
     </QueryClientProvider>
 
   );
