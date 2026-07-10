@@ -201,8 +201,14 @@
 /* ----- Container e escala desktop (1280 / 1440 / 1536 / 1920 / 2560) ---- */
 .app-shell {
   /* deslocamento horizontal do bloco central para ancorar a trilha */
-  --shell-offset: max(0px, calc((100vw - var(--container-max) - 260px) / 2));
+  --shell-offset: max(0px, calc((100vw - var(--container-max) - 220px) / 2));
+  --main-pl: 0px;
+  --main-pr: 0px;
 }
+@media (min-width: 1024px) {
+  .app-shell { --main-pl: calc(var(--shell-offset) + 220px); --main-pr: var(--shell-offset); }
+}
+
 .app-container {
   max-width: var(--container-max);
   margin-inline: auto;
