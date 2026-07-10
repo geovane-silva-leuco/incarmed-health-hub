@@ -409,7 +409,7 @@ function InvestmentSlide({ slide }: { slide: Slide }) {
             </p>
             <p className="text-xs text-slate-500">Após a fase de ativação inicial</p>
           </div>
-          <p className="text-3xl font-black tabular-nums text-[var(--brand-navy)] md:text-4xl">
+          <p className="num-mono text-3xl font-black text-[var(--brand-navy)] md:text-4xl">
             {formatBRL(total)}
           </p>
         </div>
