@@ -103,7 +103,7 @@ export const agenteInteligente = {
   suporteTecnicoMensal: "4 horas/mês, não acumulativas (todos os planos)",
   cobrancaLLM: { input: 16.8, output: 67.2 },
   descricao:
-    "Sistema de atendimento inteligente 24/7 baseado em IA generativa: responde dúvidas com base em base de conhecimento, apoia o agente humano com sugestões de resposta, executa ações simples em sistemas integrados (consultar status, gerar 2ª via, registrar solicitações). Aplicável em WhatsApp, Webchat, e-mail, Mobi e demais canais compatíveis.",
+    "Sistema de atendimento inteligente 24/7 baseado em IA generativa. Responde dúvidas apoiado em base de conhecimento, sugere respostas para o agente humano e executa ações simples em sistemas integrados (consultar status, gerar 2ª via, registrar solicitações). Também faz leitura de imagens enviadas pelo paciente (carteirinha do plano de saúde, pedido médico e similares); leitura de imagem consome mais créditos que texto. Aplicável em WhatsApp, Webchat, e-mail, Mobi e demais canais compatíveis.",
 };
 
 // ---------- Flux 3.0 ----------
