@@ -107,11 +107,12 @@ export function StatCard({
         {label}
       </p>
       <p
-        className={`mt-4 font-display font-semibold tabular-nums ${
+        data-pulse-anchor
+        className={`num-mono mt-4 font-semibold ${
           accent ? "text-3xl text-[var(--signal)]" : "text-2xl text-[var(--ink)]"
         }`}
-        style={{ fontVariantNumeric: "tabular-nums" }}
       >
+
         {value}
       </p>
       {hint && (

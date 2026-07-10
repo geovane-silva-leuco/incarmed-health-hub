@@ -156,13 +156,14 @@ function KeyNumber({
         {label}
       </p>
       <p
-        className={`mt-3 font-display font-semibold tabular-nums ${
+        data-pulse-anchor
+        className={`num-mono mt-3 font-semibold ${
           accent ? "text-[38px] text-[var(--signal)]" : "text-[32px] text-[var(--ink)]"
         }`}
-        style={{ fontVariantNumeric: "tabular-nums" }}
       >
         {value}
       </p>
+
       {hint && (
         <p className="mt-1.5 text-[12px] text-[var(--paper-ink)]/60">{hint}</p>
       )}

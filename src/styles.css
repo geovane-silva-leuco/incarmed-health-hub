@@ -194,8 +194,17 @@
   .tabular,
   [class*="tabular-nums"] {
     font-variant-numeric: tabular-nums;
-    font-family: var(--font-mono);
   }
+
+  /* .num-mono — força IBM Plex Mono para números financeiros,
+     independentemente de outras classes utilitárias (font-display etc.). */
+  .num-mono,
+  .num-mono * {
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace !important;
+    font-variant-numeric: tabular-nums !important;
+    letter-spacing: -0.01em;
+  }
+
 }
 
 /* ----- Container e escala desktop (1280 / 1440 / 1536 / 1920 / 2560) ---- */
