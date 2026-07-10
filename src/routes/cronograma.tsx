@@ -6,23 +6,26 @@ export const Route = createFileRoute("/cronograma")({
   head: () => ({
     meta: [
       { title: "Cronograma — Projeto Incarmed" },
-      { name: "description", content: "Etapas de execução: da proposta ao go-live." },
+      { name: "description", content: "Etapas macro da entrega, da proposta ao go-live." },
     ],
   }),
   component: CronogramaPage,
 });
 
 const steps = [
-  { icon: FileText, titulo: "Proposta", desc: "Envio e validação comercial" },
-  { icon: CheckCircle2, titulo: "Aceite", desc: "Confirmação do cliente" },
-  { icon: FileSignature, titulo: "Contrato", desc: "Assinatura (5 dias úteis após envio)" },
-  { icon: Rocket, titulo: "Kickoff / Handoff", desc: "Transferência para o time técnico" },
-  { icon: Settings2, titulo: "Ativação", desc: "Configuração + treinamento" },
-  { icon: ClipboardCheck, titulo: "Homologação", desc: "Testes conjuntos (Sob Medida)" },
-  { icon: Zap, titulo: "Go Live", desc: "Operação em produção" },
+  { icon: FileText, titulo: "Proposta", desc: "Envio e validação comercial", semanas: 1 },
+  { icon: CheckCircle2, titulo: "Aceite", desc: "Confirmação do cliente", semanas: 1 },
+  { icon: FileSignature, titulo: "Contrato", desc: "Assinatura em até 5 dias úteis", semanas: 1 },
+  { icon: Rocket, titulo: "Kickoff", desc: "Handoff para o time técnico", semanas: 1 },
+  { icon: Settings2, titulo: "Ativação", desc: "Configuração e treinamento", semanas: 3 },
+  { icon: ClipboardCheck, titulo: "Homologação", desc: "Testes conjuntos (Sob Medida)", semanas: 2 },
+  { icon: Zap, titulo: "Go Live", desc: "Operação em produção", semanas: 1 },
 ];
 
+const totalSemanas = steps.reduce((s, x) => s + x.semanas, 0);
+
 function CronogramaPage() {
+  let acumulado = 0;
   return (
     <div>
       <SectionTitle
@@ -31,31 +34,62 @@ function CronogramaPage() {
         description="Etapas macro da entrega. Prazos específicos variam por solução."
       />
 
-      <div className="rounded-xl border border-border bg-card p-8 shadow-sm">
-        <ol className="grid grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-7">
+      {/* Timeline horizontal compacta */}
+      <div className="rounded-xl border border-[var(--line-paper)] bg-[var(--card)] p-5 shadow-[0_1px_2px_rgba(14,17,23,0.04),0_8px_20px_-12px_rgba(14,17,23,0.15)]">
+        <ol className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-7">
           {steps.map((s, i) => (
             <li key={i} className="relative">
               {i < steps.length - 1 && (
-                <div className="absolute left-1/2 top-6 hidden h-[2px] w-full bg-gradient-to-r from-[var(--brand-cyan)]/70 to-[var(--brand-cyan)]/20 lg:block" />
+                <div className="absolute left-1/2 top-5 hidden h-[2px] w-full bg-[var(--signal)]/30 lg:block" />
               )}
               <div className="relative flex flex-col items-center text-center">
-                <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--brand-navy)] text-[var(--brand-cyan)] shadow-md">
-                  <s.icon className="h-5 w-5" />
+                <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-[var(--ink)] text-[var(--signal)] shadow-md">
+                  <s.icon className="h-4 w-4" />
                 </div>
-                <p className="mt-3 text-sm font-semibold text-[var(--brand-navy)]">{s.titulo}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
-                <span className="mt-2 text-[10px] font-bold uppercase tracking-wider text-[var(--brand-cyan)]">Etapa {i + 1}</span>
+                <p className="mt-2 text-xs font-semibold text-[var(--ink)]">{s.titulo}</p>
+                <p className="text-[11px] text-[var(--paper-ink)]/60">{s.desc}</p>
               </div>
             </li>
           ))}
         </ol>
       </div>
 
-      <div className="mt-6 rounded-lg border-l-4 border-l-[var(--brand-cyan)] bg-[var(--brand-cyan)]/5 p-4 text-sm text-foreground">
-        <p>
-          <strong>Prazos por solução:</strong> Conecta — contrato disponibilizado em até 3 dias úteis após aceite, com 5 dias úteis para assinatura. Flux, VoiceBOT e Sob Medida — cronograma definido conforme escopo aprovado e disponibilização de acessos/documentação pelo cliente.
-        </p>
+      {/* Gantt simplificado */}
+      <div className="mt-4 rounded-xl border border-[var(--line-paper)] bg-[var(--card)] p-5 shadow-[0_1px_2px_rgba(14,17,23,0.04),0_8px_20px_-12px_rgba(14,17,23,0.15)]">
+        <div className="mb-3 flex items-baseline justify-between">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-[var(--ink)]">
+            Distribuição no tempo
+          </h2>
+          <span className="font-mono text-[11px] tabular-nums text-[var(--paper-ink)]/60">
+            {totalSemanas} semanas totais
+          </span>
+        </div>
+        <div className="space-y-1.5">
+          {steps.map((s, i) => {
+            const start = (acumulado / totalSemanas) * 100;
+            const width = (s.semanas / totalSemanas) * 100;
+            acumulado += s.semanas;
+            return (
+              <div key={i} className="grid grid-cols-[140px_1fr_60px] items-center gap-3 text-xs">
+                <span className="truncate font-semibold text-[var(--ink)]">{s.titulo}</span>
+                <div className="relative h-5 rounded-sm bg-[var(--paper-ink)]/5">
+                  <div
+                    className="absolute inset-y-0 rounded-sm bg-[var(--signal)]"
+                    style={{ left: `${start}%`, width: `${width}%` }}
+                  />
+                </div>
+                <span className="text-right font-mono tabular-nums text-[var(--paper-ink)]/60">
+                  {s.semanas} sem.
+                </span>
+              </div>
+            );
+          })}
+        </div>
       </div>
+
+      <p className="mt-3 text-xs italic text-[var(--paper-ink)]/60">
+        Estimativa referencial. Prazos definitivos por solução são acordados após o kickoff.
+      </p>
     </div>
   );
 }
