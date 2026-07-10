@@ -44,11 +44,11 @@ function AgentePage() {
         </a>
       </div>
 
-      <div className="mb-6 rounded-lg border-l-4 border-l-[var(--brand-cyan)] bg-[var(--brand-cyan)]/5 p-4">
+      <div className="mb-6 rounded-lg border border-[var(--line-paper)] border-l-4 border-l-[var(--signal)] bg-[var(--paper)] p-4">
         <div className="flex items-start gap-3">
-          <AlertTriangle className="mt-0.5 h-4 w-4 flex-none text-[var(--brand-cyan)]" />
-          <p className="text-sm text-foreground">
-            <strong>Atenção:</strong> o plano <strong>Tiny</strong> (R$ 1.447,00/mês) coincide numericamente com o valor mensal do projeto <strong>Sob Medida</strong>, mas são cobranças de recursos totalmente diferentes. Nunca some como se fosse um único item.
+          <AlertTriangle className="mt-0.5 h-4 w-4 flex-none text-[var(--signal)]" />
+          <p className="text-sm text-[var(--paper-ink)]">
+            O valor do plano <strong>Tiny</strong> (<span className="num-mono">R$ 1.447,00</span>/mês) coincide com o do projeto <strong>Sob Medida</strong>, mas são cobranças de escopos diferentes — não representam o mesmo item somado duas vezes.
           </p>
         </div>
       </div>

@@ -339,7 +339,7 @@ function StandardSlide({ slide }: { slide: Slide }) {
             {slide.price && (
               <p className="text-right text-sm text-slate-500">
                 <span className="mr-2 uppercase tracking-wider">{slide.price.label}</span>
-                <span className="text-lg font-bold tabular-nums text-[var(--brand-navy)]">
+                <span className="num-mono text-lg font-bold text-[var(--brand-navy)]">
                   {slide.price.value}
                 </span>
                 <span className="text-slate-400">{slide.price.note}</span>
@@ -398,7 +398,7 @@ function InvestmentSlide({ slide }: { slide: Slide }) {
                   <p className="truncate text-xs text-slate-500">{l.hint}</p>
                 </div>
               </div>
-              <p className="tabular-nums text-slate-700">{formatBRL(l.valor)}<span className="text-xs text-slate-400">/mês</span></p>
+              <p className="num-mono text-slate-700">{formatBRL(l.valor)}<span className="text-xs text-slate-400">/mês</span></p>
             </li>
           ))}
         </ul>
@@ -409,7 +409,7 @@ function InvestmentSlide({ slide }: { slide: Slide }) {
             </p>
             <p className="text-xs text-slate-500">Após a fase de ativação inicial</p>
           </div>
-          <p className="text-3xl font-black tabular-nums text-[var(--brand-navy)] md:text-4xl">
+          <p className="num-mono text-3xl font-black text-[var(--brand-navy)] md:text-4xl">
             {formatBRL(total)}
           </p>
         </div>
