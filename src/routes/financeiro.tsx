@@ -224,11 +224,11 @@ function FinanceiroPage() {
               <tr key={i} className={i % 2 ? "bg-[var(--brand-surface)]" : "bg-white"}>
                 <td className="px-4 py-3 font-semibold text-[var(--brand-navy)]">{l.solucao}</td>
                 <td className="px-4 py-3 text-muted-foreground">{l.tipo}</td>
-                <td className="px-4 py-3 text-right font-semibold">{l.mensal === 0 ? "—" : formatBRL(l.mensal)}</td>
+                <td className="num-mono px-4 py-3 text-right font-semibold" data-pulse-anchor>{l.mensal === 0 ? "—" : formatBRL(l.mensal)}</td>
                 {visao === "anual" && (
-                  <td className="px-4 py-3 text-right">{l.mensal === 0 ? "—" : formatBRL(l.mensal * 12)}</td>
+                  <td className="num-mono px-4 py-3 text-right" data-pulse-anchor>{l.mensal === 0 ? "—" : formatBRL(l.mensal * 12)}</td>
                 )}
-                <td className="px-4 py-3 text-right">{l.ativacao === 0 ? "—" : formatBRL(l.ativacao)}</td>
+                <td className="num-mono px-4 py-3 text-right" data-pulse-anchor>{l.ativacao === 0 ? "—" : formatBRL(l.ativacao)}</td>
                 <td className="px-4 py-3 text-xs text-muted-foreground">{l.pagamento}</td>
               </tr>
             ))}
@@ -237,8 +237,8 @@ function FinanceiroPage() {
                 <td className="px-4 py-3 font-semibold text-[var(--brand-navy)]">Flux 3.0 · On-Premise (Licenciamento anual)</td>
                 <td className="px-4 py-3 text-muted-foreground">Licenciamento anual</td>
                 <td className="px-4 py-3 text-right text-xs italic text-muted-foreground">n/a</td>
-                <td className="px-4 py-3 text-right font-semibold">{formatBRL(fluxAnualSeparado)}</td>
-                <td className="px-4 py-3 text-right">{formatBRL(fluxModalidadeOnPremise.ativacaoUnica)}</td>
+                <td className="num-mono px-4 py-3 text-right font-semibold" data-pulse-anchor>{formatBRL(fluxAnualSeparado)}</td>
+                <td className="num-mono px-4 py-3 text-right" data-pulse-anchor>{formatBRL(fluxModalidadeOnPremise.ativacaoUnica)}</td>
                 <td className="px-4 py-3 text-xs font-semibold text-amber-800">Anual à vista (linha separada)</td>
               </tr>
             )}
@@ -247,20 +247,21 @@ function FinanceiroPage() {
                 <td className="px-4 py-3 font-semibold text-[var(--brand-navy)]">Flux 3.0 · On-Premise</td>
                 <td className="px-4 py-3 text-muted-foreground">Licenciamento anual</td>
                 <td className="px-4 py-3 text-right text-xs italic text-muted-foreground">Não aplicável na visão mensal</td>
-                <td className="px-4 py-3 text-right">{formatBRL(fluxModalidadeOnPremise.ativacaoUnica)}</td>
+                <td className="num-mono px-4 py-3 text-right" data-pulse-anchor>{formatBRL(fluxModalidadeOnPremise.ativacaoUnica)}</td>
                 <td className="px-4 py-3 text-xs text-muted-foreground">Ver visão Anual</td>
               </tr>
             )}
             <tr className="bg-[var(--brand-navy)] font-bold text-white">
               <td className="px-4 py-3" colSpan={2}>TOTAL</td>
-              <td className="px-4 py-3 text-right">{formatBRL(totalMensalRecorrente)}</td>
+              <td className="num-mono px-4 py-3 text-right" data-pulse-anchor>{formatBRL(totalMensalRecorrente)}</td>
               {visao === "anual" && (
-                <td className="px-4 py-3 text-right">{formatBRL(totalMensalRecorrente * 12 + fluxAnualSeparado)}</td>
+                <td className="num-mono px-4 py-3 text-right" data-pulse-anchor>{formatBRL(totalMensalRecorrente * 12 + fluxAnualSeparado)}</td>
               )}
-              <td className="px-4 py-3 text-right">{formatBRL(totalAtivacao)}</td>
+              <td className="num-mono px-4 py-3 text-right" data-pulse-anchor>{formatBRL(totalAtivacao)}</td>
               <td className="px-4 py-3" />
             </tr>
           </tbody>
+
         </table>
       </div>
 
