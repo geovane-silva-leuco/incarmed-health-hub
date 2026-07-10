@@ -22,6 +22,7 @@ interface SegmentedToggleProps<T extends string> {
   options: readonly SegmentedOption<T>[];
   /** Densidade do controle. `sm` combina com o painel de simulação do Financeiro. */
   size?: "sm" | "md";
+  disabled?: boolean;
 }
 
 export function SegmentedToggle<T extends string>({
@@ -30,13 +31,15 @@ export function SegmentedToggle<T extends string>({
   onChange,
   options,
   size = "md",
+  disabled = false,
 }: SegmentedToggleProps<T>) {
   const pad = size === "sm" ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm";
   return (
     <div
       role="group"
       aria-label={ariaLabel}
-      className="inline-flex rounded-lg border border-border bg-white p-1 shadow-sm"
+      aria-disabled={disabled}
+      className={`inline-flex rounded-lg border border-border bg-white p-1 shadow-sm ${disabled ? "opacity-60" : ""}`}
     >
       {options.map((o) => {
         const active = o.value === value;
@@ -45,8 +48,9 @@ export function SegmentedToggle<T extends string>({
             key={o.value}
             type="button"
             aria-pressed={active}
+            disabled={disabled}
             onClick={() => onChange(o.value)}
-            className={`rounded-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-cyan)] ${pad} ${
+            className={`rounded-md font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-cyan)] disabled:cursor-not-allowed ${pad} ${
               active
                 ? "bg-[var(--brand-navy)] text-white"
                 : "text-muted-foreground hover:text-[var(--brand-navy)]"
