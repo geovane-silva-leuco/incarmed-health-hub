@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Building, Users, MapPin } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { sobMedidaFrentes } from "@/data/pricing";
 import { oportunidade } from "@/data/oportunidade";
 import { formatNumber } from "@/lib/format";
-import { FeatureCard } from "@/components/leucotron/brand";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -39,33 +39,22 @@ function DashboardHome() {
         A Leucotron entrega a central de relacionamento inteligente, pronta para escalar.
       </p>
 
-      {/* Bloco de valorização do cliente — usa apenas dados já existentes em oportunidade.ts */}
+      {/* Bloco de valorização do cliente */}
       <div className="mt-10">
         <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--paper-ink)]/50">
           Sobre o {oportunidade.cliente}
         </p>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <FeatureCard icon={<Building className="h-4 w-4" />} title="Porte">
-            <p className="text-sm">
-              Grupo hospitalar de grande porte, referência regional em serviços de saúde,
-              com estrutura consolidada de atendimento presencial e digital.
-            </p>
-          </FeatureCard>
-          <FeatureCard icon={<Users className="h-4 w-4" />} title="Time de relacionamento">
-            <p className="text-sm">
-              Cerca de <strong>38 pessoas</strong> dedicadas ao atendimento, distribuídas entre telefonia
-              (manhã e tarde) e canais digitais, dentro de um quadro total próximo de
-              <strong> 700 a 800 colaboradores</strong>.
-            </p>
-          </FeatureCard>
-          <FeatureCard icon={<MapPin className="h-4 w-4" />} title="Atuação">
-            <p className="text-sm">
-              Operação de destaque na <strong>Bahia</strong>, com processos de agendamento e
-              relacionamento maduros e pronta para dar o próximo salto com automação e IA.
-            </p>
-          </FeatureCard>
+        <div className="border-l-2 border-[var(--signal)] pl-5">
+          <p className="text-[15px] leading-relaxed text-[var(--paper-ink)]/80">
+            Fundado em 2003, em Santo Antônio de Jesus, o Incarmed é hoje o maior hospital privado do Recôncavo Baiano,
+            com laboratório e centro cirúrgico próprios e especialidades que vão de cardiologia a cirurgia bariátrica.
+            Sua equipe médica já ocupou posições de referência nacional, como a presidência da Associação Brasileira
+            para o Estudo da Obesidade (Abeso), e liderou procedimentos inéditos na região, incluindo tratamentos
+            avançados de arritmia cardíaca em Salvador. É para uma operação desse porte que esta proposta foi desenhada.
+          </p>
         </div>
       </div>
+
 
       <div className="mt-14">
         <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--paper-ink)]/50">
