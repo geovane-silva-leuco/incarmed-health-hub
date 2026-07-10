@@ -44,31 +44,31 @@ function AgentePage() {
         </a>
       </div>
 
-      <div className="mb-6 rounded-lg border border-[var(--line-paper)] border-l-4 border-l-[var(--signal)] bg-[var(--paper)] p-4">
+      <div className="mb-5 rounded-lg border border-[var(--line-paper)] border-l-4 border-l-[var(--signal)] bg-[var(--paper)] p-3">
         <div className="flex items-start gap-3">
           <AlertTriangle className="mt-0.5 h-4 w-4 flex-none text-[var(--signal)]" />
           <p className="text-sm text-[var(--paper-ink)]">
-            O valor do plano <strong>Tiny</strong> (<span className="num-mono">R$ 1.447,00</span>/mês) coincide com o do projeto <strong>Sob Medida</strong>, mas são cobranças de escopos diferentes — não representam o mesmo item somado duas vezes.
+            O valor do plano <strong>Tiny</strong> (<span className="num-mono">R$ 1.447,00</span>/mês) coincide com o do projeto <strong>Sob Medida</strong>, mas são cobranças de escopos diferentes, não representam o mesmo item somado duas vezes.
           </p>
         </div>
       </div>
 
-      <h2 className="mb-4 text-lg font-semibold text-[var(--brand-navy)]">Planos disponíveis</h2>
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+      <h2 className="mb-3 text-base font-semibold text-[var(--brand-navy)]">Planos disponíveis</h2>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {agenteInteligentePlanos.map((p) => {
-          const contratado = p.plano === cfg.agentePlano;
+          const selecionado = p.plano === cfg.agentePlano;
           return (
-            <div key={p.plano} className={`rounded-xl border p-6 shadow-sm ${contratado ? "border-[var(--brand-cyan)] bg-white ring-2 ring-[var(--brand-cyan)]/40" : "border-border bg-card"}`}>
-              {contratado && (
-                <span className="mb-3 inline-flex items-center gap-1 rounded-full bg-[var(--brand-cyan)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
-                  <Check className="h-3 w-3" /> Contratado
+            <div key={p.plano} className={`rounded-xl border p-5 shadow-sm ${selecionado ? "border-[var(--signal)] bg-white ring-2 ring-[var(--signal)]/30" : "border-border bg-card"}`}>
+              {selecionado && (
+                <span className="mb-2 inline-flex items-center gap-1 rounded-full bg-[var(--signal)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
+                  <Check className="h-3 w-3" /> Selecionado
                 </span>
               )}
-              <h3 className="text-2xl font-bold text-[var(--brand-navy)]">{p.plano}</h3>
-              <p className="mt-1 text-3xl font-bold text-[var(--brand-navy)]">
+              <h3 className="text-xl font-bold text-[var(--brand-navy)]">{p.plano}</h3>
+              <p className="mt-1 text-2xl font-bold text-[var(--brand-navy)]">
                 {formatBRL(p.valorMensal)}<span className="ml-1 text-sm font-normal text-muted-foreground">/mês</span>
               </p>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{p.limites}</p>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{p.limites}</p>
             </div>
           );
         })}

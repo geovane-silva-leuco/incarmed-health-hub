@@ -78,17 +78,17 @@ export function SectionTitle({
   return (
     <>
       <StickyTitleBar visible={!visible} title={title} theme="paper" />
-      <header className="mb-10 max-w-4xl">
+      <header className="mb-6 max-w-4xl">
         {eyebrow && (
-          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
+          <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
             {eyebrow}
           </p>
         )}
-        <h1 ref={ref} className="font-display text-4xl font-semibold text-[var(--ink)] md:text-5xl">
+        <h1 ref={ref} className="font-display text-3xl font-semibold text-[var(--ink)] md:text-4xl">
           {title}
         </h1>
         {description && (
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[var(--paper-ink)]/70 md:text-[17px]">
+          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-[var(--paper-ink)]/70">
             {description}
           </p>
         )}
@@ -111,15 +111,15 @@ export function ProductBanner({
   return (
     <>
       <StickyTitleBar visible={!visible} title={title} theme="paper" />
-      <header className="mb-12 border-b border-[var(--line-paper)] pb-10">
-        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
+      <header className="mb-6 border-b border-[var(--line-paper)] pb-5">
+        <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
           {eyebrow}
         </p>
-        <h1 ref={ref} className="font-display text-4xl font-semibold text-[var(--ink)] md:text-6xl">
+        <h1 ref={ref} className="font-display text-3xl font-semibold text-[var(--ink)] md:text-5xl">
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--paper-ink)]/70">
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--paper-ink)]/70">
             {subtitle}
           </p>
         )}
@@ -172,6 +172,41 @@ export function StatCard({
           {hint}
         </p>
       )}
+    </div>
+  );
+}
+
+/**
+ * FeatureCard — padrão único de quadrante para todas as páginas de
+ * seção. Barra lateral --signal + ícone + sombra sutil de elevação.
+ */
+export function FeatureCard({
+  icon,
+  title,
+  children,
+  className = "",
+}: {
+  icon?: ReactNode;
+  title: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`group relative overflow-hidden rounded-xl border border-[var(--line-paper)] bg-[var(--card)] p-5 shadow-[0_1px_2px_rgba(14,17,23,0.04),0_8px_20px_-12px_rgba(14,17,23,0.15)] transition-shadow hover:shadow-[0_1px_2px_rgba(14,17,23,0.05),0_14px_28px_-14px_rgba(14,17,23,0.25)] ${className}`}
+    >
+      <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-[var(--signal)]" />
+      <div className="flex items-start gap-3">
+        {icon && (
+          <span className="flex h-9 w-9 flex-none items-center justify-center rounded-lg bg-[var(--signal)]/10 text-[var(--signal)]">
+            {icon}
+          </span>
+        )}
+        <div className="min-w-0 flex-1">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--ink)]">{title}</h3>
+          <div className="mt-2 text-sm leading-relaxed text-[var(--paper-ink)]">{children}</div>
+        </div>
+      </div>
     </div>
   );
 }

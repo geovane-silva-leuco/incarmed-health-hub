@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SectionTitle, CheckList } from "@/components/leucotron/brand";
-import { escopoResumo, naoEscopo } from "@/data/escopo";
-import { XCircle } from "lucide-react";
+import { SectionTitle } from "@/components/leucotron/brand";
+import { escopoPorSolucao } from "@/data/escopo";
+import { CheckCircle2, XCircle } from "lucide-react";
 
 export const Route = createFileRoute("/escopo")({
   head: () => ({
     meta: [
-      { title: "Escopo & Não Escopo — Sob Medida Incarmed" },
-      { name: "description", content: "O que está e o que não está incluído no projeto de integração PIXEON." },
+      { title: "Escopo e Não Escopo — Proposta Incarmed" },
+      { name: "description", content: "O que está e o que não está incluído em cada solução da proposta." },
     ],
   }),
   component: EscopoPage,
@@ -18,29 +18,50 @@ function EscopoPage() {
     <div>
       <SectionTitle
         eyebrow="Delimitação do projeto"
-        title="Escopo & Não Escopo"
-        description="Baseado nas 5 frentes do projeto Sob Medida — evita retrabalho e alinha expectativas com o cliente."
+        title="Escopo e Não Escopo"
+        description="Organizado por solução para alinhar expectativas e evitar retrabalho."
       />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border-t-4 border-t-[var(--brand-cyan)] border-x border-b border-border bg-card p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-[var(--brand-navy)]">✓ Escopo — o que está incluído</h2>
-          <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
-          <div className="mt-4"><CheckList items={escopoResumo} /></div>
-        </div>
-
-        <div className="rounded-xl border-t-4 border-t-red-500 border-x border-b border-border bg-card p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-[var(--brand-navy)]">✗ Não Escopo — o que NÃO está incluído</h2>
-          <div className="mt-1 h-[3px] w-10 bg-red-500" />
-          <ul className="mt-4 space-y-2.5">
-            {naoEscopo.map((it, i) => (
-              <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-foreground">
-                <XCircle className="mt-0.5 h-4 w-4 flex-none text-red-500/70" />
-                <span>{it}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="space-y-6">
+        {escopoPorSolucao.map((s) => (
+          <section
+            key={s.id}
+            className="rounded-xl border border-[var(--line-paper)] bg-[var(--card)] p-5 shadow-[0_1px_2px_rgba(14,17,23,0.04),0_8px_20px_-12px_rgba(14,17,23,0.15)]"
+          >
+            <div className="flex items-center gap-3 border-b border-[var(--line-paper)] pb-3">
+              <span className="h-2 w-2 rounded-full bg-[var(--signal)]" aria-hidden />
+              <h2 className="text-base font-semibold text-[var(--ink)]">{s.solucao}</h2>
+            </div>
+            <div className="grid grid-cols-1 gap-6 pt-4 md:grid-cols-2">
+              <div>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--paper-ink)]/60">
+                  Incluído
+                </p>
+                <ul className="space-y-2">
+                  {s.escopo.map((it, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm leading-relaxed">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none text-[var(--signal)]" />
+                      <span>{it}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--paper-ink)]/60">
+                  Não incluído
+                </p>
+                <ul className="space-y-2">
+                  {s.naoEscopo.map((it, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm leading-relaxed text-[var(--paper-ink)]/80">
+                      <XCircle className="mt-0.5 h-4 w-4 flex-none text-[var(--paper-ink)]/40" />
+                      <span>{it}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   );

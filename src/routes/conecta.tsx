@@ -27,20 +27,20 @@ function ConectaPage() {
     <div>
       <ProductBanner
         eyebrow="Solução 1 de 5"
-        title="Conecta"
-        subtitle="Plataforma de atendimento omnichannel: WhatsApp, redes sociais, webchat, e-mail, voz — tudo em uma única tela, com automação, dashboard em tempo real e integrações via API."
+        title="Conecta · WhatsApp"
+        subtitle="Plataforma de atendimento omnichannel centrada em WhatsApp, com redes sociais, webchat, e-mail e voz na mesma tela. Automação, dashboard em tempo real e integrações via API."
         icon={<MessageSquare className="h-7 w-7" />}
       />
 
-      {/* Resumo do que está contratado nesta proposta — cruzamento com a config global. */}
-      <div className="mb-6 rounded-xl border-2 border-[var(--brand-cyan)] bg-[var(--brand-cyan)]/5 p-5">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--brand-navy)]">Contratado nesta proposta</p>
-        <div className="mt-2 flex flex-wrap items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--brand-navy)] px-3 py-1 text-xs font-semibold text-white">
+      {/* Resumo do que foi selecionado nesta proposta */}
+      <div className="mb-5 rounded-xl border border-[var(--signal)]/30 bg-[var(--signal)]/5 p-4">
+        <p className="text-xs font-semibold uppercase tracking-wider text-[var(--ink)]">Selecionado nesta proposta</p>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--ink)] px-3 py-1 text-xs font-semibold text-white">
             <Check className="h-3 w-3" /> Pacote {formatNumber(pacoteContratado)} msg/mês
           </span>
           {cfg.conectaConfirmadorConsultas && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--brand-navy)] px-3 py-1 text-xs font-semibold text-white">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--ink)] px-3 py-1 text-xs font-semibold text-white">
               <CalendarCheck2 className="h-3 w-3" /> Confirmador de Consultas
             </span>
           )}
@@ -70,15 +70,15 @@ function ConectaPage() {
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Confirmador de Consultas</h2>
               {cfg.conectaConfirmadorConsultas ? (
-                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-semibold text-emerald-700">Contratado</span>
+                <span className="rounded-full bg-[var(--signal)]/10 px-2 py-0.5 text-[11px] font-semibold text-[var(--signal)]">Selecionado nesta proposta</span>
               ) : (
-                <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-700">Opcional — não contratado</span>
+                <span className="rounded-full bg-[var(--paper-ink)]/5 px-2 py-0.5 text-[11px] font-semibold text-[var(--paper-ink)]/60">Opcional, não selecionado</span>
               )}
             </div>
             <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
             <p className="mt-3 text-sm text-muted-foreground">
               Módulo do Conecta que envia HSM automatizado de confirmação de consulta via WhatsApp, coleta a resposta do paciente
-              (confirma, remarca ou cancela) e devolve o status ao PIXEON — reduzindo no-show sem operação manual.
+              (confirma, remarca ou cancela) e devolve o status ao PIXEON, reduzindo no-show sem operação manual.
             </p>
             <CheckList
               items={[
@@ -93,40 +93,40 @@ function ConectaPage() {
       </div>
 
       <div className="mt-6 rounded-xl border border-border bg-card shadow-sm">
-        <div className="p-6 pb-3">
-          <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Pacotes de mensagens (WhatsApp)</h2>
+        <div className="p-5 pb-2">
+          <h2 className="text-base font-semibold text-[var(--brand-navy)]">Pacotes de mensagens (WhatsApp)</h2>
           <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
-          <p className="mt-2 text-sm text-muted-foreground">
-            Volume atual do Incarmed (~15-16k msg/mês). Pacote contratado destacado abaixo. Excedente cobrado no mês seguinte.
+          <p className="mt-1 text-xs text-muted-foreground">
+            Volume atual do Incarmed cerca de 15 a 16 mil mensagens por mês. Pacote selecionado destacado abaixo.
           </p>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-[var(--brand-navy)] text-white">
+        <div className="max-h-[260px] overflow-y-auto">
+          <table className="w-full text-xs">
+            <thead className="sticky top-0 bg-[var(--brand-navy)] text-white">
               <tr>
-                <th className="px-4 py-3 text-left font-semibold">Pacote (msg/mês)</th>
-                <th className="px-4 py-3 text-right font-semibold">Valor mensal</th>
-                <th className="px-4 py-3 text-right font-semibold">Excedente (por msg)</th>
+                <th className="px-3 py-2 text-left font-semibold">Pacote (msg/mês)</th>
+                <th className="px-3 py-2 text-right font-semibold">Valor mensal</th>
+                <th className="px-3 py-2 text-right font-semibold">Excedente / msg</th>
               </tr>
             </thead>
             <tbody>
               {conectaPacotesMensagens.map((p, i) => {
-                const contratado = p.mensagens === pacoteContratado;
+                const selecionado = p.mensagens === pacoteContratado;
                 return (
                   <tr
                     key={p.mensagens}
                     className={
-                      contratado
-                        ? "bg-[var(--brand-cyan)]/15 font-semibold text-[var(--brand-navy)]"
+                      selecionado
+                        ? "bg-[var(--signal)]/10 font-semibold text-[var(--brand-navy)]"
                         : i % 2 ? "bg-[var(--brand-surface)]" : "bg-white"
                     }
                   >
-                    <td className="px-4 py-2.5">
-                      {contratado && <Check className="mr-1 inline h-3.5 w-3.5 text-[var(--brand-navy)]" />}
+                    <td className="px-3 py-1.5">
+                      {selecionado && <Check className="mr-1 inline h-3 w-3 text-[var(--signal)]" />}
                       {formatNumber(p.mensagens)}
                     </td>
-                    <td className="px-4 py-2.5 text-right font-semibold">{formatBRL(p.valorMensal)}</td>
-                    <td className="px-4 py-2.5 text-right font-mono text-xs">{formatBRLLong(p.valorExcedente)}</td>
+                    <td className="px-3 py-1.5 text-right font-semibold">{formatBRL(p.valorMensal)}</td>
+                    <td className="px-3 py-1.5 text-right font-mono text-[11px]">{formatBRLLong(p.valorExcedente)}</td>
                   </tr>
                 );
               })}

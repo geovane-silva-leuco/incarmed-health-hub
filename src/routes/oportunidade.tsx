@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { SectionTitle } from "@/components/leucotron/brand";
+import { SectionTitle, FeatureCard } from "@/components/leucotron/brand";
 import { oportunidade } from "@/data/oportunidade";
-import { Users, Building, Target, Activity } from "lucide-react";
+import { Users, Building, Target, Activity, BarChart3 } from "lucide-react";
 
 export const Route = createFileRoute("/oportunidade")({
   head: () => ({
     meta: [
       { title: "Sobre a Oportunidade — Incarmed" },
-      { name: "description", content: "Contexto do cliente Incarmed: dor, volumes, contatos e status da negociação." },
+      { name: "description", content: "Contexto do cliente Incarmed com dor principal, volumes e contatos-chave." },
     ],
   }),
   component: OportunidadePage,
@@ -19,78 +19,52 @@ function OportunidadePage() {
       <SectionTitle
         eyebrow="Contexto do cliente"
         title="Sobre a Oportunidade"
-        description="Resumo executivo da negociação em curso com o Incarmed."
+        description="Resumo executivo do contexto do Incarmed que motivou esta proposta."
       />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <div className="flex items-center gap-2 text-[var(--brand-navy)]">
-            <Building className="h-4 w-4 text-[var(--brand-cyan)]" />
-            <h3 className="text-sm font-semibold uppercase tracking-wider">Cliente</h3>
-          </div>
-          <p className="mt-3 text-lg font-bold text-[var(--brand-navy)]">{oportunidade.cliente}</p>
-          <p className="text-sm text-muted-foreground">{oportunidade.segmento}</p>
-        </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <FeatureCard icon={<Building className="h-4 w-4" />} title="Cliente">
+          <p className="text-base font-semibold text-[var(--ink)]">{oportunidade.cliente}</p>
+          <p className="text-xs text-[var(--paper-ink)]/60">{oportunidade.segmento}</p>
+        </FeatureCard>
 
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <div className="flex items-center gap-2 text-[var(--brand-navy)]">
-            <Users className="h-4 w-4 text-[var(--brand-cyan)]" />
-            <h3 className="text-sm font-semibold uppercase tracking-wider">Contatos-chave</h3>
-          </div>
-          <ul className="mt-3 space-y-2 text-sm">
+        <FeatureCard icon={<Users className="h-4 w-4" />} title="Contatos-chave">
+          <ul className="space-y-1 text-sm">
             {oportunidade.contatos.map((c) => (
               <li key={c.nome}>
-                <span className="font-semibold text-[var(--brand-navy)]">{c.nome}</span>
-                <span className="text-muted-foreground"> — {c.papel}</span>
+                <span className="font-semibold text-[var(--ink)]">{c.nome}</span>
+                <span className="text-[var(--paper-ink)]/60"> · {c.papel}</span>
               </li>
             ))}
           </ul>
-        </div>
+        </FeatureCard>
 
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <div className="flex items-center gap-2 text-[var(--brand-navy)]">
-            <Activity className="h-4 w-4 text-[var(--brand-cyan)]" />
-            <h3 className="text-sm font-semibold uppercase tracking-wider">Status</h3>
-          </div>
-          <p className="mt-3 text-sm leading-relaxed text-foreground">{oportunidade.status}</p>
-        </div>
+        <FeatureCard icon={<Activity className="h-4 w-4" />} title="Preferência de contato">
+          <p className="text-sm">{oportunidade.confirmacaoAgenda}</p>
+        </FeatureCard>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border-l-4 border-l-[var(--brand-cyan)] border-y border-r border-border bg-card p-6 shadow-sm">
-          <div className="flex items-center gap-2 text-[var(--brand-navy)]">
-            <Target className="h-4 w-4 text-[var(--brand-cyan)]" />
-            <h3 className="text-sm font-semibold uppercase tracking-wider">Dor principal</h3>
-          </div>
-          <p className="mt-3 text-base leading-relaxed text-foreground">{oportunidade.dorPrincipal}</p>
-        </div>
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--brand-navy)]">Necessidade central</h3>
-          <div className="mt-1 h-[2px] w-8 bg-[var(--brand-cyan)]" />
-          <p className="mt-3 text-base leading-relaxed text-foreground">{oportunidade.necessidade}</p>
-        </div>
+      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <FeatureCard icon={<Target className="h-4 w-4" />} title="Dor principal">
+          <p className="text-sm">{oportunidade.dorPrincipal}</p>
+        </FeatureCard>
+        <FeatureCard icon={<Target className="h-4 w-4" />} title="Necessidade central">
+          <p className="text-sm">{oportunidade.necessidade}</p>
+        </FeatureCard>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--brand-navy)]">Confirmação de agenda</h3>
-          <div className="mt-1 h-[2px] w-8 bg-[var(--brand-cyan)]" />
-          <p className="mt-3 text-sm leading-relaxed text-foreground">{oportunidade.confirmacaoAgenda}</p>
-        </div>
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--brand-navy)]">Volumes atuais</h3>
-          <div className="mt-1 h-[2px] w-8 bg-[var(--brand-cyan)]" />
-          <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+      <div className="mt-4">
+        <FeatureCard icon={<BarChart3 className="h-4 w-4" />} title="Volumes atuais">
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm md:grid-cols-3">
             {oportunidade.volumes.map((v) => (
-              <div key={v.label} className="border-b border-border/60 pb-2">
-                <dt className="text-xs text-muted-foreground">{v.label}</dt>
-                <dd className="font-semibold text-[var(--brand-navy)]">{v.valor}</dd>
+              <div key={v.label} className="border-b border-[var(--line-paper)] pb-1.5">
+                <dt className="text-[11px] text-[var(--paper-ink)]/60">{v.label}</dt>
+                <dd className="font-semibold text-[var(--ink)]">{v.valor}</dd>
               </div>
             ))}
           </dl>
-        </div>
+        </FeatureCard>
       </div>
-
     </div>
   );
 }
