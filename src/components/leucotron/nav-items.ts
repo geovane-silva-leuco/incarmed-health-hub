@@ -20,7 +20,7 @@ export const navSections = [
     id: "solucoes",
     label: "Soluções",
     items: [
-      { title: "Conecta", url: "/conecta", icon: MessageSquare },
+      { title: "Conecta · WhatsApp", url: "/conecta", icon: MessageSquare },
       { title: "Agente Inteligente", url: "/agente", icon: Bot },
       { title: "Flux 3.0", url: "/flux", icon: PhoneCall },
       { title: "VoiceBOT", url: "/voicebot", icon: Mic },

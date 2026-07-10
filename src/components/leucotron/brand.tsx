@@ -78,17 +78,17 @@ export function SectionTitle({
   return (
     <>
       <StickyTitleBar visible={!visible} title={title} theme="paper" />
-      <header className="mb-10 max-w-4xl">
+      <header className="mb-6 max-w-4xl">
         {eyebrow && (
-          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
+          <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
             {eyebrow}
           </p>
         )}
-        <h1 ref={ref} className="font-display text-4xl font-semibold text-[var(--ink)] md:text-5xl">
+        <h1 ref={ref} className="font-display text-3xl font-semibold text-[var(--ink)] md:text-4xl">
           {title}
         </h1>
         {description && (
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-[var(--paper-ink)]/70 md:text-[17px]">
+          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-[var(--paper-ink)]/70">
             {description}
           </p>
         )}
@@ -111,15 +111,15 @@ export function ProductBanner({
   return (
     <>
       <StickyTitleBar visible={!visible} title={title} theme="paper" />
-      <header className="mb-12 border-b border-[var(--line-paper)] pb-10">
-        <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
+      <header className="mb-6 border-b border-[var(--line-paper)] pb-5">
+        <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
           {eyebrow}
         </p>
-        <h1 ref={ref} className="font-display text-4xl font-semibold text-[var(--ink)] md:text-6xl">
+        <h1 ref={ref} className="font-display text-3xl font-semibold text-[var(--ink)] md:text-5xl">
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--paper-ink)]/70">
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-[var(--paper-ink)]/70">
             {subtitle}
           </p>
         )}
