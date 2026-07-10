@@ -1,11 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { FileSignature, Download, Mail, CheckCircle2, Settings2 } from "lucide-react";
+import { FileSignature, Download, Mail, CheckCircle2, Settings2, Lock } from "lucide-react";
 import jsPDF from "jspdf";
 import { SectionTitle } from "@/components/leucotron/brand";
-import { useProposalConfig, getConectaPacote, getAgentePlano } from "@/lib/proposal-config";
-import { sobMedidaFrentes } from "@/data/pricing";
-import { formatNumber } from "@/lib/format";
+import { SegmentedToggle } from "@/components/leucotron/segmented-toggle";
+import {
+  useProposalConfig, setProposalConfig, getConectaPacote, getAgentePlano,
+  type FluxModalidade, type VoiceBotModo,
+} from "@/lib/proposal-config";
+import { conectaPacotesMensagens, agenteInteligentePlanos, sobMedidaFrentes, type PlanoAgente } from "@/data/pricing";
+import { formatBRL, formatNumber } from "@/lib/format";
 
 
 /**
