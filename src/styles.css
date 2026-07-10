@@ -76,24 +76,33 @@
 :root {
   --radius: 0.5rem; /* 8px — discreto, consistente. Sem rounded-2xl/3xl por padrão */
 
-  /* Nova paleta de assinatura */
+  /* Nova paleta de assinatura — paper NEUTRO (não bege/creme) */
   --ink: #16151A;
   --surface: #201F26;
-  --paper: #F6F4EF;
+  --paper: #F4F4F5;         /* cinza-papel neutro (zinc-100) — sem amarelo */
   --paper-ink: #1B1A1F;
-  --signal: #C9803E;      /* âmbar-cobre — usar com escassez */
+  --signal: #C9803E;        /* âmbar-cobre — usar com escassez */
   --signal-hi: #E89A55;
-  --trust: #1F5C6B;       /* azul-petróleo — apenas dados/gráficos */
-  --line: rgba(246, 244, 239, 0.12);
+  --trust: #1F5C6B;         /* azul-petróleo — apenas dados/gráficos */
+  --line: rgba(244, 244, 245, 0.12);
   --line-paper: rgba(27, 26, 31, 0.10);
 
+  /* Container e escala tipográfica desktop (1280–2560) */
+  --container-max: 1200px;
+  --container-pad: clamp(1.5rem, 3vw, 4rem);
+  --fs-display: clamp(2.5rem, 3.4vw + 1rem, 4.5rem);
+  --fs-h2: clamp(1.5rem, 1.2vw + 1rem, 2.25rem);
+  --fs-body: clamp(0.95rem, 0.25vw + 0.85rem, 1.0625rem);
+  --section-y: clamp(3rem, 6vw, 6.5rem);
+
   /* Tokens semânticos shadcn remapeados para a nova paleta */
-  --background: #F6F4EF;
+  --background: #F4F4F5;
   --foreground: #1B1A1F;
   --card: #FFFFFF;
   --card-foreground: #1B1A1F;
   --popover: #FFFFFF;
   --popover-foreground: #1B1A1F;
+
   --primary: #16151A;
   --primary-foreground: #F6F4EF;
   --secondary: #EDEAE2;
