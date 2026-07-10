@@ -476,12 +476,20 @@ function AprovacaoPage() {
               Resumo do que será aprovado
             </p>
             {configResumo.map((r) => {
-              const marcada = selecionadas.includes(r.id);
+              // "Incluído na proposta" = há configuração real, não depende do
+              // checklist de aprovação. Só Voicebot e Sob Medida podem ser
+              // efetivamente removidos da proposta; os demais são sempre inclusos.
+              const incluido =
+                r.id === "voicebot"
+                  ? cfg.voicebotModo !== "off"
+                  : r.id === "sob-medida"
+                    ? cfg.sobMedidaFrentes.length > 0
+                    : true;
               return (
-                <div key={r.id} className={`flex flex-col gap-1 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${marcada ? "" : "opacity-40"}`}>
+                <div key={r.id} className={`flex flex-col gap-1 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4 ${incluido ? "" : "opacity-40"}`}>
                   <p className="text-sm font-semibold text-[var(--brand-navy)]">
                     {r.solucao}
-                    {!marcada && <span className="ml-2 text-[10px] font-normal uppercase text-muted-foreground">(não selecionada)</span>}
+                    {!incluido && <span className="ml-2 text-[10px] font-normal uppercase text-muted-foreground">(não incluída na proposta)</span>}
                   </p>
                   <p className="text-sm text-foreground sm:text-right">{r.escolha}</p>
                 </div>
