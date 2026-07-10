@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Building, Users, MapPin } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { sobMedidaFrentes } from "@/data/pricing";
 import { oportunidade } from "@/data/oportunidade";
 import { formatNumber } from "@/lib/format";
-import { FeatureCard } from "@/components/leucotron/brand";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
