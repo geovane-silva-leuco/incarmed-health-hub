@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PhoneCall, Check, X } from "lucide-react";
+import { PhoneCall, Check, MousePointerClick, Sparkles } from "lucide-react";
 import { ProductBanner, CheckList, StatCard } from "@/components/leucotron/brand";
 import { SegmentedToggle } from "@/components/leucotron/segmented-toggle";
 import {
   fluxModalidadeCloud, fluxModalidadeOnPremise,
-  fluxPlanosOpcionais, fluxRecursosTelefonia, fluxRecursosIA,
+  fluxRecursosTelefonia, fluxRecursosIA,
 } from "@/data/pricing";
 import { formatBRL } from "@/lib/format";
 import { useProposalConfig, setProposalConfig, type FluxModalidade } from "@/lib/proposal-config";
@@ -37,7 +37,12 @@ function FluxPage() {
       />
 
       <div className="mb-6">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Modalidade contratada</p>
+        <div className="mb-2 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <span>Modalidade selecionada</span>
+          <span className="inline-flex items-center gap-1 rounded-full bg-[var(--signal)]/10 px-2 py-0.5 text-[10px] font-bold normal-case tracking-normal text-[var(--signal)]">
+            <MousePointerClick className="h-3 w-3" /> clique para trocar e ver os valores
+          </span>
+        </div>
         <SegmentedToggle
           ariaLabel="Modalidade comercial do Flux 3.0"
           value={modo}
@@ -50,12 +55,12 @@ function FluxPage() {
       </div>
 
 
-      <div className="rounded-xl border-2 border-[var(--brand-cyan)] bg-card p-6 shadow-sm">
+      <div className="rounded-xl border-2 border-[var(--brand-cyan)] bg-card p-5 shadow-sm">
         <div className="flex flex-wrap items-baseline justify-between gap-4">
           <div>
-            <p className="inline-flex items-center gap-1 rounded-full bg-[var(--brand-cyan)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"><Check className="h-3 w-3" /> Contratado</p>
+            <p className="inline-flex items-center gap-1 rounded-full bg-[var(--signal)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white"><Check className="h-3 w-3" /> Selecionado nesta proposta</p>
             <h2 className="mt-2 text-xl font-semibold text-[var(--brand-navy)]">{m.nome}</h2>
-            <p className="text-sm text-muted-foreground">Hospedagem: {m.quemHospeda} · Pagamento: {m.pagamento}</p>
+            <p className="text-sm text-muted-foreground">Hospedagem {m.quemHospeda} · Pagamento {m.pagamento}</p>
           </div>
         </div>
 
@@ -145,45 +150,25 @@ function FluxPage() {
         )}
       </div>
 
-      <div className="mt-6 rounded-xl border border-border bg-card shadow-sm">
-        <div className="p-6 pb-3">
-          <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Comparativo de planos opcionais</h2>
-          <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-[var(--brand-navy)] text-white">
-              <tr>
-                <th className="px-4 py-3 text-left font-semibold">Recurso</th>
-                <th className="px-4 py-3 text-center font-semibold">Basic</th>
-                <th className="px-4 py-3 text-center font-semibold">Essential</th>
-                <th className="px-4 py-3 text-center font-semibold">Advanced</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fluxPlanosOpcionais.map((r, i) => (
-                <tr key={r.recurso} className={i % 2 ? "bg-[var(--brand-surface)]" : "bg-white"}>
-                  <td className="px-4 py-2">{r.recurso}</td>
-                  <td className="px-4 py-2 text-center">{r.basic ? <Check className="mx-auto h-4 w-4 text-[var(--brand-cyan)]" /> : <X className="mx-auto h-4 w-4 text-muted-foreground/40" />}</td>
-                  <td className="px-4 py-2 text-center">{r.essential ? <Check className="mx-auto h-4 w-4 text-[var(--brand-cyan)]" /> : <X className="mx-auto h-4 w-4 text-muted-foreground/40" />}</td>
-                  <td className="px-4 py-2 text-center">{r.advanced ? <Check className="mx-auto h-4 w-4 text-[var(--brand-cyan)]" /> : <X className="mx-auto h-4 w-4 text-muted-foreground/40" />}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Recursos de telefonia</h2>
+        <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+          <h2 className="text-base font-semibold text-[var(--brand-navy)]">Recursos de telefonia</h2>
           <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
-          <div className="mt-4"><CheckList items={fluxRecursosTelefonia} /></div>
+          <div className="mt-3"><CheckList items={fluxRecursosTelefonia} /></div>
         </div>
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-[var(--brand-navy)]">Recursos de IA (adicionais)</h2>
-          <div className="mt-1 h-[3px] w-10 bg-[var(--brand-cyan)]" />
-          <div className="mt-4"><CheckList items={fluxRecursosIA} /></div>
+        <div className="relative overflow-hidden rounded-xl border border-[var(--signal)]/30 bg-card p-5 shadow-sm">
+          <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-[var(--signal)]" />
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-[var(--signal)]" />
+            <h2 className="text-base font-semibold text-[var(--brand-navy)]">Recursos de IA</h2>
+            <span className="rounded-full bg-[var(--signal)]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[var(--signal)]">
+              Módulo opcional adicional
+            </span>
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Não faz parte do pacote base do Flux 3.0. Contratado separadamente conforme necessidade.
+          </p>
+          <div className="mt-3"><CheckList items={fluxRecursosIA} /></div>
         </div>
       </div>
     </div>
