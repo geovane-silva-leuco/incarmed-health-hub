@@ -38,8 +38,10 @@ export function SignalTrail() {
       {/* Desktop: trilha vertical fixa ------------------------------------ */}
       <nav
         aria-label="Navegação da proposta"
-        className="fixed left-0 top-0 z-30 hidden h-dvh w-[220px] flex-col justify-between border-r border-[var(--line-paper)] bg-[var(--paper)] px-6 py-8 lg:flex print:hidden"
+        className="fixed top-0 z-30 hidden h-dvh w-[220px] flex-col justify-between border-r border-[var(--line-paper)] bg-[var(--paper)] px-6 py-8 lg:flex print:hidden"
+        style={{ left: "var(--shell-offset, 0px)" }}
       >
+
         <Link to="/" className="group inline-flex items-baseline gap-2">
           <span className="font-display text-lg font-bold tracking-tight text-[var(--ink)]">
             Leucotron
