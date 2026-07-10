@@ -339,7 +339,7 @@ function StandardSlide({ slide }: { slide: Slide }) {
             {slide.price && (
               <p className="text-right text-sm text-slate-500">
                 <span className="mr-2 uppercase tracking-wider">{slide.price.label}</span>
-                <span className="text-lg font-bold tabular-nums text-[var(--brand-navy)]">
+                <span className="num-mono text-lg font-bold text-[var(--brand-navy)]">
                   {slide.price.value}
                 </span>
                 <span className="text-slate-400">{slide.price.note}</span>
