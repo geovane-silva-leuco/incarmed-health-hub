@@ -1,17 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { navSections } from "./nav-items";
 
 /**
  * SignalTrail — elemento de assinatura + navegação lateral.
  *
- * Substitui a sidebar padrão de admin por uma trilha fina vertical na
- * lateral esquerda (desktop). Cada ponto representa uma seção da proposta;
- * o ponto ativo é destacado em --signal. A linha pulsa como uma onda de
- * áudio ao trocar de seção, referenciando "chamada conectada" — metáfora
- * literal do produto vendido (comunicação unificada).
+ * Trilha vertical fina na lateral (desktop). Cada ponto é uma seção da
+ * proposta; o ativo destaca em --signal. A linha "pulsa" como onda de
+ * áudio nos gatilhos:
+ *   1. troca de rota
+ *   2. quando um elemento com [data-pulse-anchor] entra em ~50% da viewport
+ *      (números-chave, R$ em destaque, células financeiras).
  *
- * Em mobile vira uma barra de progresso horizontal fina no topo.
+ * Em mobile vira uma barra de progresso horizontal fina no topo — cada
+ * segmento é clicável e navega para a rota correspondente.
  */
 
 type FlatItem = { title: string; url: string; sectionLabel: string };
@@ -26,12 +28,52 @@ export function SignalTrail() {
   const prevPath = useRef(path);
   const activeIdx = Math.max(0, flat.findIndex((i) => i.url === path));
 
+  // Trigger único: incrementa a chave -> React remonta o <span> e a
+  // animação signal-pulse reinicia. Reusado por route-change e IO.
+  const firePulse = useCallback(() => {
+    setPulseKey((k) => k + 1);
+  }, []);
+
+  // 1) Pulso na troca de rota.
   useEffect(() => {
     if (prevPath.current !== path) {
       prevPath.current = path;
-      setPulseKey((k) => k + 1);
+      firePulse();
     }
-  }, [path]);
+  }, [path, firePulse]);
+
+  // 2) Pulso quando âncoras entram em viewport (~50%).
+  //    Re-escaneia a cada troca de rota (novos nós montados).
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) return;
+
+    // Espera montagem dos nós da nova rota.
+    const timeoutId = window.setTimeout(() => {
+      const seen = new WeakSet<Element>();
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting && !seen.has(e.target)) {
+              seen.add(e.target);
+              firePulse();
+            }
+          }
+        },
+        { threshold: 0.5 },
+      );
+      document.querySelectorAll<HTMLElement>("[data-pulse-anchor]").forEach((el) => {
+        io.observe(el);
+      });
+      // guarda em ref para cleanup
+      cleanupRef.current = () => io.disconnect();
+    }, 60);
+
+    const cleanupRef = { current: () => {} };
+    return () => {
+      window.clearTimeout(timeoutId);
+      cleanupRef.current();
+    };
+  }, [path, firePulse]);
 
   return (
     <>
@@ -55,7 +97,7 @@ export function SignalTrail() {
             aria-hidden
             className="absolute left-[7px] top-2 bottom-2 w-px origin-center bg-[var(--paper-ink)]/15"
           />
-          {/* pulso — reinicia a cada troca de rota */}
+          {/* pulso — reinicia a cada troca de rota ou entrada de âncora */}
           <span
             key={pulseKey}
             aria-hidden
@@ -94,13 +136,35 @@ export function SignalTrail() {
         </p>
       </nav>
 
-      {/* Mobile: barra de progresso horizontal fina no topo ---------------- */}
-      <div className="fixed inset-x-0 top-0 z-30 h-[3px] bg-[var(--paper-ink)]/10 lg:hidden print:hidden">
-        <div
-          className="h-full bg-[var(--signal)] transition-all duration-500 ease-out"
-          style={{ width: `${((activeIdx + 1) / flat.length) * 100}%` }}
-        />
-      </div>
+      {/* Mobile: barra de progresso segmentada e clicável ------------------ */}
+      <nav
+        aria-label="Navegação da proposta (mobile)"
+        className="fixed inset-x-0 top-0 z-30 flex h-[6px] w-full gap-[2px] bg-transparent lg:hidden print:hidden"
+      >
+        {flat.map((item, i) => {
+          const active = i === activeIdx;
+          const passed = i < activeIdx;
+          return (
+            <Link
+              key={item.url}
+              to={item.url}
+              aria-label={item.title}
+              aria-current={active ? "page" : undefined}
+              className="group relative h-full flex-1 py-[2px]"
+            >
+              <span
+                className={`block h-full w-full transition-colors ${
+                  active
+                    ? "bg-[var(--signal)]"
+                    : passed
+                      ? "bg-[var(--signal)]/60"
+                      : "bg-[var(--paper-ink)]/12 group-hover:bg-[var(--paper-ink)]/25"
+                }`}
+              />
+            </Link>
+          );
+        })}
+      </nav>
     </>
   );
 }
