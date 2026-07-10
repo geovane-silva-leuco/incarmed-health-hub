@@ -198,6 +198,25 @@
   }
 }
 
+/* ----- Container e escala desktop (1280 / 1440 / 1536 / 1920 / 2560) ---- */
+.app-shell {
+  /* deslocamento horizontal do bloco central para ancorar a trilha */
+  --shell-offset: max(0px, calc((100vw - var(--container-max) - 260px) / 2));
+}
+.app-container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
+.display-xl { font-size: var(--fs-display); line-height: 1.03; letter-spacing: -0.025em; }
+.section-y { padding-block: var(--section-y); }
+
+/* Números em colunas numéricas de tabelas — não esticar em telas largas */
+table.finance-table { table-layout: fixed; width: 100%; }
+table.finance-table th.num,
+table.finance-table td.num { width: 12ch; text-align: right; font-variant-numeric: tabular-nums; }
+
+
 /* ----- Signal Trail (elemento de assinatura) ---------------------------- */
 @keyframes signal-pulse {
   0%   { transform: scaleY(1);   opacity: 0.35; }
