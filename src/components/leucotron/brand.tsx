@@ -31,11 +31,8 @@ export function DotGrid(_: { rows?: number; cols?: number; className?: string })
  * ancorada logo abaixo do TopHeader global (h-14).
  */
 function StickyTitleBar({ visible, title, theme }: { visible: boolean; title: string; theme: "ink" | "paper" }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
   const dark = theme === "ink";
-  return createPortal(
+  return (
     <div
       aria-hidden={!visible}
       className={`fixed left-0 right-0 top-14 z-10 border-b transition-opacity duration-200 print:hidden ${
@@ -45,17 +42,14 @@ function StickyTitleBar({ visible, title, theme }: { visible: boolean; title: st
           ? "border-[var(--surface)] bg-[var(--ink)]/95 text-[var(--paper)]"
           : "border-[var(--line-paper)] bg-[var(--paper)]/95 text-[var(--ink)]"
       } backdrop-blur`}
+      style={{ paddingLeft: "var(--main-pl, 0px)", paddingRight: "var(--main-pr, 0px)" }}
     >
-      <div
-        className="flex h-10 items-center px-6"
-        style={{ paddingLeft: "calc(var(--main-pl, 0px) + 1.5rem)", paddingRight: "calc(var(--main-pr, 0px) + 1.5rem)" }}
-      >
+      <div className="flex h-10 items-center px-6">
         <span className="font-display text-sm font-semibold tracking-tight">
           {title}
         </span>
       </div>
-    </div>,
-    document.body,
+    </div>
   );
 }
 
