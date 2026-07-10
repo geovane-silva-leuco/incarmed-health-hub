@@ -398,7 +398,7 @@ function InvestmentSlide({ slide }: { slide: Slide }) {
                   <p className="truncate text-xs text-slate-500">{l.hint}</p>
                 </div>
               </div>
-              <p className="tabular-nums text-slate-700">{formatBRL(l.valor)}<span className="text-xs text-slate-400">/mês</span></p>
+              <p className="num-mono text-slate-700">{formatBRL(l.valor)}<span className="text-xs text-slate-400">/mês</span></p>
             </li>
           ))}
         </ul>
