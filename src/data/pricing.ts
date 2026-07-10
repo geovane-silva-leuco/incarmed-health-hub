@@ -227,46 +227,51 @@ export const sobMedidaFrentes = [
   {
     id: 1,
     titulo: "Integração Conecta + PIXEON e fluxo de atendimento digital com Agente Inteligente",
+    resumo: "Atendimento por WhatsApp que agenda, tira dúvidas e transfere para humano quando preciso.",
     subitens: [
-      { nome: "Agendamento e Reagendamento", desc: "Coleta CPF/dados via Agente Inteligente, consulta REST ao PIXEON (especialidades, profissionais, horários) e confirma agendamento." },
+      { nome: "Agendamento e Reagendamento", desc: "Coleta CPF e dados via Agente Inteligente, consulta a API REST do PIXEON para especialidades, profissionais e horários, e confirma o agendamento." },
       { nome: "Triagem inteligente", desc: "Apoio orientativo para direcionar especialidade. Não realiza diagnóstico médico, prescrição ou decisão clínica." },
-      { nome: "Esclarecimento de dúvidas", desc: "Respostas com base na base de conhecimento fornecida pelo cliente (horários, preparo de exames, convênios etc.)." },
-      { nome: "Transferência para atendente humano", desc: "Ocorre quando o paciente solicita, há falha de integração, ou o caso exige avaliação manual." },
+      { nome: "Esclarecimento de dúvidas", desc: "Respostas com base na base de conhecimento fornecida pelo cliente, incluindo horários, preparo de exames e convênios." },
+      { nome: "Transferência para atendente humano", desc: "Ocorre quando o paciente solicita, quando há falha de integração ou quando o caso exige avaliação manual." },
     ],
   },
   {
     id: 2,
     titulo: "Recuperação de No-show / Não Comparecimento",
+    resumo: "Identifica faltas do dia no PIXEON e envia WhatsApp automático oferecendo reagendamento.",
     subitens: [
-      { nome: "Recuperação automática de faltas", desc: "Middleware consulta periodicamente a API do PIXEON, identifica ausências do dia e aciona envio de HSM via WhatsApp oferecendo reagendamento." },
-      { nome: "Middleware ativo de consulta periódica", desc: "Componente interno que evita disparos duplicados, registra logs de sucesso/falha e aciona o Conecta." },
+      { nome: "Recuperação automática de faltas", desc: "Middleware consulta periodicamente a API do PIXEON, identifica ausências do dia e envia HSM via WhatsApp oferecendo reagendamento." },
+      { nome: "Middleware ativo de consulta periódica", desc: "Componente interno que evita disparos duplicados, registra logs de sucesso e falha e aciona o Conecta." },
     ],
   },
   {
     id: 3,
     titulo: "Atendimento inteligente por voz com VoiceBOT",
+    resumo: "Mesmo fluxo do WhatsApp, mas por telefone, com voz natural e transferência para o call center.",
     subitens: [
-      { nome: "Agendamento e reagendamento por voz", desc: "Mesmo fluxo da Frente 1, mas conduzido por voz." },
+      { nome: "Agendamento e reagendamento por voz", desc: "Mesmo fluxo da Frente 1, conduzido por voz." },
       { nome: "Triagem inteligente por voz", desc: "Apoio orientativo, sem decisão clínica." },
       { nome: "Esclarecimento de dúvidas por voz", desc: "Baseado na base de conhecimento do cliente." },
-      { nome: "Transferência para atendente humano", desc: "Para o Call Center/fila/ramal definido no Flux." },
+      { nome: "Transferência para atendente humano", desc: "Encaminha para o Call Center, fila ou ramal definido no Flux." },
     ],
   },
   {
     id: 4,
     titulo: "Automação de marketing e relacionamento",
+    resumo: "Disparos segmentados de campanhas por WhatsApp usando templates HSM aprovados pela Meta.",
     subitens: [
-      { nome: "Disparos automatizados via Webhook", desc: "Cliente fornece CSV com contatos + template HSM aprovado pela Meta; Conecta realiza o disparo." },
-      { nome: "Campanhas segmentadas", desc: "Aniversário, relacionamento, por convênio/perfil, orientações preventivas. Segmentação é responsabilidade do ERP/CRM/sistema do cliente." },
+      { nome: "Disparos automatizados via Webhook", desc: "Cliente fornece CSV com contatos e template HSM aprovado pela Meta, e o Conecta realiza o disparo." },
+      { nome: "Campanhas segmentadas", desc: "Aniversário, relacionamento, convênio, perfil e orientações preventivas. A segmentação é responsabilidade do ERP/CRM do cliente." },
     ],
   },
   {
     id: 5,
     titulo: "Check-in financeiro online e validação pré-chegada",
+    resumo: "Paciente valida cadastro e paga por Pix antes de chegar, reduzindo fila na recepção.",
     subitens: [
-      { nome: "Integração com gateway de pagamento (Pix)", desc: "Sistema consome API de gateway fornecida pelo cliente (QR Code, copia-e-cola, link). Leucotron não processa pagamento diretamente, apenas consome a API." },
-      { nome: "Validação pré-chegada e redução de filas", desc: "Valida dados cadastrais, documentação, convênio, pedido médico antes da chegada do paciente." },
-      { nome: "Limitações", desc: "Criação/homologação do gateway de pagamento NÃO faz parte do escopo — deve ser fornecido pelo cliente." },
+      { nome: "Integração com gateway de pagamento (Pix)", desc: "O sistema consome a API do gateway fornecida pelo cliente, com QR Code, copia-e-cola ou link. A Leucotron não processa pagamento diretamente." },
+      { nome: "Validação pré-chegada e redução de filas", desc: "Valida dados cadastrais, documentação, convênio e pedido médico antes da chegada do paciente." },
+      { nome: "Limitações", desc: "A criação e a homologação do gateway de pagamento não fazem parte do escopo e devem ser fornecidas pelo cliente." },
     ],
   },
 ];
