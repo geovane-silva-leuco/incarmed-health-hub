@@ -165,7 +165,10 @@ function RootComponent() {
       </a>
       <div className="app-shell min-h-dvh w-full bg-[var(--paper)]">
         <SignalTrail />
-        <div className="flex min-w-0 flex-col lg:pl-[220px]">
+        <div
+          className="flex min-w-0 flex-col"
+          style={{ paddingLeft: "var(--main-pl, 0px)", paddingRight: "var(--main-pr, 0px)" }}
+        >
           <TopHeader />
           <main
             id="conteudo-principal"
@@ -175,6 +178,7 @@ function RootComponent() {
           </main>
         </div>
       </div>
+
 
     </QueryClientProvider>
 
